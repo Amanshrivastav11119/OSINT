@@ -8,50 +8,47 @@ import { LinkedinService } from '../service/linkedin.service';
 })
 export class LinkedinComponent {
   
-  selectedOption: string = 'search'; // Default to search
-  query: string = '';
-  searchType: string = 'person'; // Default to person
+ query: string;
+  searchType: string;
+  connectionCountInput: string;
+  extractUrl: string;
   searchResults: any;
-  extractUrl: string = '';
+  searchResultsWithConnectionCount: any;
   extractedProfile: any;
+  selectedSearchType: string;
 
-  constructor(private linkedinService: LinkedinService) { }
+  constructor(private linkedinService: LinkedinService) {}
 
-  onOptionChange(option: string) {
-    this.selectedOption = option;
-
-    if (option === 'search') {
-      this.resetSearchForm();
-    }
-  }
-
-  search() {
-    this.linkedinService.searchProfiles(this.query, this.searchType).subscribe(
-      data => {
+  search(): void {
+    this.linkedinService.search(this.query, this.searchType).subscribe(
+      (data) => {
         this.searchResults = data;
-        console.log(data);
       },
-      error => {
+      (error) => {
         console.error(error);
       }
     );
   }
 
-  extract() {
-    this.linkedinService.extractProfile(this.extractUrl).subscribe(
-      data => {
+  extract(): void {
+    this.linkedinService.extract(this.extractUrl).subscribe(
+      (data) => {
         this.extractedProfile = data;
-        console.log(data);
       },
-      error => {
+      (error) => {
         console.error(error);
       }
     );
   }
 
-  private resetSearchForm() {
-    this.query = '';
-    this.searchType = 'person';
+  searchWithConnectionCount(): void {
+    this.linkedinService.getConnectionCount(this.connectionCountInput).subscribe(
+      (data) => {
+        this.searchResultsWithConnectionCount = data;
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
-
 }
