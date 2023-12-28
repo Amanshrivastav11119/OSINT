@@ -12,7 +12,7 @@ export class LinkedinComponent {
   query: string = '';
   searchType: string = 'person'; // Default to person
   searchResults: any;
-  extractUrl: string = 'https://www.linkedin.com/in/amandeep-singh-5a4770168/';
+  extractUrl: string = '';
   extractedProfile: any;
 
   constructor(private linkedinService: LinkedinService) { }
@@ -29,6 +29,7 @@ export class LinkedinComponent {
     this.linkedinService.searchProfiles(this.query, this.searchType).subscribe(
       data => {
         this.searchResults = data;
+        console.log(data);
       },
       error => {
         console.error(error);
@@ -40,6 +41,7 @@ export class LinkedinComponent {
     this.linkedinService.extractProfile(this.extractUrl).subscribe(
       data => {
         this.extractedProfile = data;
+        console.log(data);
       },
       error => {
         console.error(error);
@@ -51,5 +53,5 @@ export class LinkedinComponent {
     this.query = '';
     this.searchType = 'person';
   }
-  
+
 }
