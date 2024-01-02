@@ -7,10 +7,21 @@ import { WhoisService } from '../service/whois.service';
   styleUrls: ['./whois.component.css']
 })
 export class WhoisComponent {
+
+
   domain: string;
   whoisData: any;
   nslookupData: any;
   selectedSearchType: string = 'whois'; // Default to 'whois'
+
+  // Search placeholder functions
+  isFocused: boolean = false;
+  onFocus() {
+    this.isFocused = true;
+  }
+  onBlur() {
+    this.isFocused = false;
+  } 
 
   constructor(private whoisService: WhoisService) { }
 
@@ -26,10 +37,10 @@ export class WhoisComponent {
     this.whoisService.getWhoisData(this.domain).subscribe(
       data => {
         this.whoisData = data;
-        console.log(this.whoisData);
+        console.log('Whois Data:', this.whoisData);
       },
       error => {
-        console.error(error);
+        console.error('Error fetching Whois data:', error);
       }
     );
   }
@@ -38,10 +49,10 @@ export class WhoisComponent {
     this.whoisService.nslookup(this.domain).subscribe(
       data => {
         this.nslookupData = data;
-        console.log(this.nslookupData);
+        console.log('Nslookup Data:', this.nslookupData);
       },
       error => {
-        console.error(error);
+        console.error('Error fetching Nslookup data:', error);
       }
     );
   }

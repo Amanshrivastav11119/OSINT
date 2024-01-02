@@ -1,5 +1,3 @@
-// src/app/components/google-trends-search/google-trends-search.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GoogleTrendsSearchService } from '../service/google-trends-search.service';
@@ -23,15 +21,17 @@ export class GoogleTrendsSearchComponent implements OnInit {
 
   googleTrendsData: any;
   searchForm: FormGroup;
-  // Search placeholder functions
   isFocused: boolean = false;
   currentDataType: string = '';
+
   onFocus() {
     this.isFocused = true;
   }
+
   onBlur() {
     this.isFocused = false;
   }
+
   ngOnInit(): void {
     // Additional initialization logic if needed
   }
@@ -42,6 +42,7 @@ export class GoogleTrendsSearchComponent implements OnInit {
       (data) => {
         this.googleTrendsData = data;
         console.log(this.googleTrendsData);
+
       },
       (error) => {
         console.error('Error fetching Google Trends data:', error);
@@ -50,18 +51,26 @@ export class GoogleTrendsSearchComponent implements OnInit {
   }
 
   onChangeDataTypes(selectedDataType: string): void {
-    // Ensure dataTypes is always an array
     const currentDataTypes = this.searchForm.get('dataTypes')?.value || [];
-    // Check if selectedDataType is already in the array
     const isSelected = currentDataTypes.includes(selectedDataType);
-    // Update dataTypes based on selection
     const newDataTypes = isSelected
       ? currentDataTypes.filter((type: string) => type !== selectedDataType)
       : [selectedDataType];
-    // Update the form value
+
     this.searchForm.patchValue({ dataTypes: newDataTypes });
-    // Update the currentDataType for display
     this.currentDataType = isSelected ? '' : selectedDataType;
   }
+
+  getValueForQuery(region: any, query: string): string {
+    const matchingValue = region.values.find((value: { query: string, value: string }) => value.query === query);
+    return matchingValue ? matchingValue.value : 'N/A';
+  }
+
+  getSearchQueries(): string[] {
+    return this.googleTrendsData[0].data.search_parameters.q.split(',').map((q: string) => q.trim());
+  }
   
+
+
+
 }

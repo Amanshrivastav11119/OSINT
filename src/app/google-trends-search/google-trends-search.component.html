@@ -52,7 +52,97 @@
       <h2 style="margin-left: 50%;">Google Trends Data</h2>
       <div *ngFor="let result of googleTrendsData">
         <h3>{{ result.dataType }}</h3>
-        <pre>{{ result.data | json }}</pre>
+        <!-- <pre>{{ result.data | json }}</pre> -->
+
+        <!-- Display interest_by_region in a table for GEO_MAP_0 -->
+        <div *ngIf="result.dataType === 'GEO_MAP_0'">
+          <h4>Interest by Region</h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Location</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let region of result.data.interest_by_region">
+                <td>{{ region.location }}</td>
+                <td>{{ region.value }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Display timeseries data for TIMESERIES -->
+        <div *ngIf="result.dataType === 'TIMESERIES'">
+          <h4>Timeseries Data</h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th *ngFor="let query of result.data.interest_over_time.averages">
+                  {{ query.query }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let entry of result.data.interest_over_time.timeline_data">
+                <td>{{ entry.date }}</td>
+                <td *ngFor="let query of entry.values">
+                  {{ query.value }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Display interest_by_region in a table for GEO_MAP -->
+        <div *ngIf="result.dataType === 'GEO_MAP'">
+          <h4>Interest by Region</h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Location</th>
+                <th *ngFor="let query of getSearchQueries()">
+                  {{ query.charAt(0).toUpperCase() + query.slice(1) }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let region of googleTrendsData[0].data.compared_breakdown_by_region">
+                <td>{{ region.location }}</td>
+                <td *ngFor="let query of getSearchQueries()">
+                  {{ getValueForQuery(region, query.toLowerCase()) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Display related topics -->
+        <div *ngIf="result.dataType === 'RELATED_TOPICS'">
+          <h2>Rising Topics</h2>
+          <ul *ngFor="let topic of result.data.related_topics.rising">
+            <li>
+              <strong>{{ topic.topic.title }}</strong>
+              - Value: {{ topic.value }},
+              Type: {{ topic.topic.type }},
+              Link: <a href="{{ topic.link }}" target="_blank">{{ topic.link }}</a>
+            </li>
+          </ul>
+          <h2>Top Topics</h2>
+          <ul *ngFor="let topic of result.data.related_topics.top">
+            <li>
+              <strong>{{ topic.topic.title }}</strong>
+              - Value: {{ topic.value }},
+              Type: {{ topic.topic.type }},
+              Link: <a href="{{ topic.link }}" target="_blank">{{ topic.link }}</a>
+            </li>
+          </ul>
+        </div>
+
+
+
       </div>
     </div>
   </div>

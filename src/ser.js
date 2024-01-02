@@ -35,7 +35,7 @@ app.get('/google-trends-search', async (req, res) => {
             engine: 'google_trends',
             q,
             data_type: dataType,
-            api_key: 'd77f4eb2a8eb7e58f3a73c8e3ec36aeba6dca7151f4bff04a913a00868b15735',
+            api_key: '67244b6e8d7f337f304cf92165608f8ede8c69dcb5552a0908399ecce0c27f58',
           });
           return { dataType, data: response };
         } catch (error) {
