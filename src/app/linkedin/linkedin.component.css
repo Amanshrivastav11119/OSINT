@@ -242,3 +242,58 @@
     color: red;
   }
   
+  /* Add this code to your component's CSS file */
+.profile-container {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-header h2 {
+  margin: 0;
+}
+
+.profile-header a {
+  text-decoration: none;
+  color: #007BFF;
+}
+
+.profile-body {
+  margin-top: 16px;
+}
+
+.profile-section {
+  margin-bottom: 16px;
+}
+
+/* Add more styles as needed */
+/* Add this code to your component's CSS file */
+.profile-container {
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 8px;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-header h2 {
+  margin: 0;
+}
+
+.profile-body .section {
+  margin-bottom: 16px;
+}
+
+/* Add more styles as needed */

@@ -9,13 +9,13 @@
           <div class="input-group">
             <!-- search box -->
             <input type="text" class="form-control rounded-5 shadow transparent-bg" [class.input-highlight]="isFocused"
-              (keyup.enter)="search()" [(ngModel)]="query" [(ngModel)]="extractUrl" placeholder="Enter search query" aria-label="Search Word"
-              aria-describedby="button-addon2" (focus)="onFocus()" (blur)="onBlur()" enableAutoComplete="true"
-              style="height: 50px; width: 200px;" />
+              (keyup.enter)="search()" [(ngModel)]="query" [(ngModel)]="extractUrl"  [(ngModel)]="connectionCountInput"  placeholder="Enter search query"
+              aria-label="Search Word" aria-describedby="button-addon2" (focus)="onFocus()" (blur)="onBlur()"
+              enableAutoComplete="true" style="height: 50px; width: 200px;" />
             &nbsp;
             &nbsp;
             <button class="btn btn-outline-secondary" type="Search" id="Search-addon2" style="height:40px; width: 40px;"
-              (click)="search()" >
+              (click)="search()">
               <!-- search logo -->
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search"
                 viewBox="0 0 16 16">
@@ -43,7 +43,8 @@
             &nbsp;
             &nbsp;
             <mat-form-field style="background: transparent; height: 70px;">
-              <mat-select [(ngModel)]="selectedSearchType"  placeholder="Select Search Type" panelClass="transparent-panel">
+              <mat-select [(ngModel)]="selectedSearchType" placeholder="Select Search Type"
+                panelClass="transparent-panel">
                 <mat-option value="search">Search</mat-option>
                 <mat-option value="connectionCount">Connection Count</mat-option>
                 <mat-option value="profileExtractor">Profile Extractor</mat-option>
@@ -59,8 +60,109 @@
 <div class="container-fluid mt-2">
   <div class="row mt-3">
     <h3 style="margin-left: 50%;">{{ getTitleForSearchType() }}</h3>
-    <!-- <div *ngFor="let result of getResultsForSearchType()"> -->
-      <!-- <pre>{{ result | json }}</pre> -->
-    <!-- </div> -->
+
+    <!-- Profile Extractor Results Display -->
+    <div *ngIf="selectedSearchType === 'profileExtractor' && extractedProfile" class="profile-container">
+      <!-- Profile Header Section -->
+      <div class="profile-header">
+        <div class="profile-picture">
+          <img src="{{ extractedProfile.extractor.image.contentUrl }}" alt="Profile Picture">
+        </div>
+        <div class="profile-info">
+          <h2>{{ extractedProfile.extractor.name }}</h2>
+          <p>{{ extractedProfile.extractor.jobTitle[0] }}</p>
+          <p>{{ extractedProfile.extractor.address.addressLocality }}, {{
+            extractedProfile.extractor.address.addressCountry }}</p>
+          <p>Description: {{ extractedProfile.extractor.description }}</p>
+        </div>
+      </div>
+      <!-- Education Section -->
+      <div class="education">
+        <p>Education</p>
+        <div *ngFor="let education of extractedProfile.extractor.education">
+          <h4>{{ education.school }}</h4>
+          <p>{{ education.degree }} • {{ education.duration }}</p>
+        </div>
+      </div>
+      <!-- Experience Section -->
+      <div class="experience">
+        <p>Experience</p>
+        <div *ngFor="let job of extractedProfile.extractor.worksFor">
+          <h4>{{ job.name }}</h4>
+          <p>{{ job.jobTitle }} • {{ job.duration }} • {{ job.location }}</p>
+        </div>
+      </div>
+      <!-- Skills Section -->
+      <div class="skills">
+        <p>Skills</p>
+        <div *ngFor="let skill of extractedProfile.extractor.skills">
+          <h4>{{ skill.name }}</h4>
+          <p>{{ skill.description }}</p>
+        </div>
+      </div>
+      <!-- Interests Section -->
+      <div class="interests">
+        <p>Interests</p>
+        <div *ngFor="let interest of extractedProfile.extractor.interests">
+          <img src="{{ interest.image }}" alt="{{ interest.name }}">
+          <p>{{ interest.name }} • {{ interest.description }}</p>
+          <p>{{ interest.followers }} followers</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connection Count Results Display -->
+    <div *ngIf="selectedSearchType === 'connectionCount' && searchResultsWithConnectionCount">
+      <!-- Display Connection Count Profile Picture and Name -->
+      <div class="connection-profile-header">
+        <div class="profile-picture">
+          <img src="{{ searchResultsWithConnectionCount.data.profilePicture }}" alt="Profile Picture" style="height: 200px; width: 200px;">
+        </div>
+        <div class="profile-name">
+          <h2>{{ searchResultsWithConnectionCount.data.firstName }} {{ searchResultsWithConnectionCount.data.lastName }}</h2>
+        </div>
+      </div>
+      <!-- Display Connection Count Details -->
+      <div class="connection-count-details">
+        <p><strong>Connection Count:</strong> {{ searchResultsWithConnectionCount.connection }}</p>
+        <p><strong>Follower Count:</strong> {{ searchResultsWithConnectionCount.follower }}</p>
+      </div>
+      <!-- Display Connection Data -->
+      <div class="connection-data">
+        <h4>{{ searchResultsWithConnectionCount.data.firstName }} {{ searchResultsWithConnectionCount.data.lastName }}
+        </h4>
+        <p>{{ searchResultsWithConnectionCount.data.headline }}</p>
+        <p>{{ searchResultsWithConnectionCount.data.geo.city }}, {{ searchResultsWithConnectionCount.data.geo.country }}
+        </p>
+        <p>{{ searchResultsWithConnectionCount.data.summary }}</p>
+        <!-- Display Skills -->
+        <div class="skills">
+          <p><strong>Skills:</strong></p>
+          <ul>
+            <li *ngFor="let skill of searchResultsWithConnectionCount.data.skills">{{ skill.name }}</li>
+          </ul>
+        </div>
+        <!-- Display Education -->
+        <div class="education">
+          <p><strong>Education:</strong></p>
+          <ul>
+            <li *ngFor="let education of searchResultsWithConnectionCount.data.educations">
+              {{ education.degree }} at {{ education.school }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedSearchType === 'company' && searchResults.length > 0">
+      <div class="company-results">
+        <div *ngFor="let company of searchResults">
+          <h4>{{ company.title }}</h4>
+          <p>{{ company.snippet }}</p>
+          <a [href]="company.url" target="_blank">Visit Company</a>
+        </div>
+      </div>
+    </div>
+    
   </div>
 </div>
