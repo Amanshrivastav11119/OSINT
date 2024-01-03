@@ -26,6 +26,8 @@ export class DashboardComponent implements OnInit {
   chartLabels: string[] = [];
   chartCountryLabels: string[] = [];
   chartCountryData: number[] = [];
+  chartSourceLabels: string[] = [];
+  chartSourceData: number[] = [];
   chartLanguageLabels: string[] = [];
   chartLanguageData: number[] = [];
   public barChartLegend = true;
@@ -86,14 +88,14 @@ export class DashboardComponent implements OnInit {
 
   //chart data for newscountbysource
   private updateChartSourceData() {
-    const sortedLabels = Object.keys(this.newsCountBySource).sort((a, b) => this.newsCountBySource[b] - this.newsCountBySource[a]);
-    const topLabels = sortedLabels.slice(0, 15);
-    this.chartLabels = topLabels;
-    this.chartData = topLabels.map(label => this.newsCountBySource[label]);
+    const sortedSourceLabels = Object.keys(this.newsCountBySource).sort((a, b) => this.newsCountBySource[b] - this.newsCountBySource[a]);
+    const topSourceLabels = sortedSourceLabels.slice(0, 15);
+    this.chartSourceLabels = topSourceLabels;
+    this.chartSourceData = topSourceLabels.map(label => this.newsCountBySource[label]);
     this.barChartData = {
-      labels: this.chartLabels,
+      labels: this.chartSourceLabels,
       datasets: [
-        { data: this.chartData, label: 'News Count by Source' }
+        { data: this.chartSourceData, label: 'News Count by Source' }
       ]
     };
     // console.log('Chart Labels:', this.chartLabels);
