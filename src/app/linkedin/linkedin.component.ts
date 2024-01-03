@@ -25,62 +25,71 @@ export class LinkedinComponent {
   }
   onBlur() {
     this.isFocused = false;
-  } 
+  }
 
   constructor(private linkedinService: LinkedinService) { }
 
   search(): void {
-    this.linkedinService.search(this.query, this.searchType)
-      .pipe(
-        take(1)
-      )
-      .subscribe(
-        (initialData) => {
-          this.searchResults = [initialData];
-          this.fetchAdditionalResults(9);
+    this.searchResults = []; // Reset search results
+    if (this.selectedSearchType === 'search') {
+      this.performSearch();
+    } else if (this.selectedSearchType === 'profileExtractor') {
+      this.extract();
+    } else if (this.selectedSearchType === 'connectionCount') {
+      this.searchWithConnectionCount();
+    }
+  }
+
+  //profile search and company
+  performSearch(): void {
+    this.linkedinService.search(this.query, this.searchType).subscribe(
+      (data) => {
+        this.searchResults = data;
+        console.log(data);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+
+  //profile extractor
+  extract(): void {
+    if (this.extractUrl) {
+      this.linkedinService.extract(this.extractUrl).subscribe(
+        (data) => {
+          this.extractedProfile = data;
+          console.log(data);
         },
         (error) => {
           console.error(error);
         }
       );
-  }
-
-  private fetchAdditionalResults(count: number): void {
-    for (let i = 0; i < count; i++) {
-      this.linkedinService.search(this.query, this.searchType)
-        .pipe(
-          take(1)
-        )
-        .subscribe(
-          (data) => {
-            this.searchResults = this.searchResults.concat(data.results);
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
+    } else {
+      console.error('LinkedIn profile URL is not provided.');
     }
   }
 
-  extract(): void {
-    this.linkedinService.extract(this.extractUrl).subscribe(
-      (data) => {
-        this.extractedProfile = data;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
-
+  //connection coount
   searchWithConnectionCount(): void {
     this.linkedinService.getConnectionCount(this.connectionCountInput).subscribe(
       (data) => {
         this.searchResultsWithConnectionCount = data;
+        console.log(data);
       },
       (error) => {
         console.error(error);
       }
     );
   }
+
+
+  getTitleForSearchType(): string {
+    return this.selectedSearchType === 'connectionCount' ? 'Connection Count Results' : 'Profile Extractor Results';
+  }
+
+  getResultsForSearchType(): any[] {
+    return this.selectedSearchType === 'connectionCount' ? this.searchResultsWithConnectionCount : this.extractedProfile;
+  }
+
 }

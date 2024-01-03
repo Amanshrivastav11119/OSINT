@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,19 +26,29 @@ export class LinkedinService {
   }
 
   extract(url: string): Observable<any> {
+    if (!url) {
+      return throwError('LinkedIn profile URL is not provided.');
+    }
+
     const options = {
-      method: 'GET',
-      url: 'https://linkedin-profiles1.p.rapidapi.com/extract',
-      params: {
-        url
-      },
-      headers: this.getHeaders()
+      headers: new HttpHeaders({
+        'X-RapidAPI-Key': this.rapidApiKey,
+        'X-RapidAPI-Host': this.rapidApiHost,
+      }),
+      params: new HttpParams().set('url', url).set('html', '1')
     };
 
-    return this.http.request(options.method, options.url, { params: options.params, headers: options.headers });
+    return this.http.get('https://linkedin-profiles1.p.rapidapi.com/extract', options)
+      .pipe(
+        catchError(error => {
+          console.error('Error extracting LinkedIn profile:', error);
+          return throwError('Error extracting LinkedIn profile.');
+        })
+      );
   }
+  
 
-   getConnectionCount(username: string): Observable<any> {
+  getConnectionCount(username: string): Observable<any[]> {
     const options = {
       headers: new HttpHeaders({
         'X-RapidAPI-Key': this.rapidApiKey,
@@ -46,9 +56,10 @@ export class LinkedinService {
       }),
       params: new HttpParams().set('username', username)
     };
-
-    return this.http.get('https://linkedin-api8.p.rapidapi.com/data-connection-count', options);
+  
+    return this.http.get<any[]>('https://linkedin-api8.p.rapidapi.com/data-connection-count', options);
   }
+  
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({

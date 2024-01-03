@@ -1,53 +1,66 @@
-<div>
-  <label>
-    Search Type:
-    <select [(ngModel)]="selectedSearchType">
-      <option value="search">Search</option>
-      <option value="connectionCount">Connection Count</option>
-      <option value="profileExtractor">Profile Extractor</option>
-    </select>
-  </label>
-
-  <div *ngIf="selectedSearchType === 'search'">
-    <label>
-      Enter search query:
-      <input type="text" class="form-control rounded-5 shadow transparent-bg" [class.input-highlight]="isFocused"
-        (keyup.enter)="search()" [(ngModel)]="query" placeholder="Enter search query" aria-label="Search Word"
-        aria-describedby="button-addon2" (focus)="onFocus()" (blur)="onBlur()" enableAutoComplete="true" />
-    </label>
-
-    <label>
-      <input type="radio" [(ngModel)]="searchType" value="person"> Person
-    </label>
-    <label>
-      <input type="radio" [(ngModel)]="searchType" value="company"> Company
-    </label>
-    &nbsp;
-    &nbsp;
-
-    <button class="btn btn-outline-secondary" type="Search" id="Search-addon2" style="height:40px; width: 40px;"
-      (click)="search()">Search</button>
-
-    <h3>Search Results</h3>
-    <div *ngFor="let result of searchResults">
-      <pre>{{ result | json }}</pre>
+<!-- Second Toolbar -->
+<mat-toolbar-row style="height:80px;">
+  &nbsp;
+  &nbsp;
+  <div class="py-4 ">
+    <div class="container-fluid px-6">
+      <div class="row align-items-center">
+        <div class="col-xl">
+          <div class="input-group">
+            <!-- search box -->
+            <input type="text" class="form-control rounded-5 shadow transparent-bg" [class.input-highlight]="isFocused"
+              (keyup.enter)="search()" [(ngModel)]="query" [(ngModel)]="extractUrl" placeholder="Enter search query" aria-label="Search Word"
+              aria-describedby="button-addon2" (focus)="onFocus()" (blur)="onBlur()" enableAutoComplete="true"
+              style="height: 50px; width: 200px;" />
+            &nbsp;
+            &nbsp;
+            <button class="btn btn-outline-secondary" type="Search" id="Search-addon2" style="height:40px; width: 40px;"
+              (click)="search()" >
+              <!-- search logo -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
+                <path
+                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+              </svg>
+            </button>
+            <span class="example-spacer"></span>
+            &nbsp;
+            &nbsp;
+            <ng-container *ngIf="selectedSearchType === 'search'">
+              <div class="col-xl search-options d-flex ">
+                <div class="form-check form-check-inline mb-0">
+                  <input class="form-check-input" type="radio" [(ngModel)]="searchType" name="searchType" value="person"
+                    [checked]="searchType === 'person'">
+                  <label class="form-check-label">Person</label>
+                </div>
+                <div class="form-check form-check-inline mb-0">
+                  <input class="form-check-input" type="radio" [(ngModel)]="searchType" name="searchType"
+                    value="company" [checked]="searchType === 'company'">
+                  <label class="form-check-label">Company</label>
+                </div>
+              </div>
+            </ng-container>
+            &nbsp;
+            &nbsp;
+            <mat-form-field style="background: transparent; height: 70px;">
+              <mat-select [(ngModel)]="selectedSearchType"  placeholder="Select Search Type" panelClass="transparent-panel">
+                <mat-option value="search">Search</mat-option>
+                <mat-option value="connectionCount">Connection Count</mat-option>
+                <mat-option value="profileExtractor">Profile Extractor</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-  <ng-container *ngIf="selectedSearchType !== 'search'">
-    <div>
-      <label>
-        Enter search query:
-        <input type="text" [(ngModel)]="query" placeholder="Enter search query">
-      </label>
-
-      <button (click)="search()">Search</button>
-    </div>
-
-    <h3>{{ selectedSearchType === 'connectionCount' ? 'Connection Count Results' : 'Profile Extractor Results' }}</h3>
-    <div
-      *ngFor="let result of (selectedSearchType === 'connectionCount' ? searchResultsWithConnectionCount : extractedProfile)">
-      <pre>{{ result | json }}</pre>
-    </div>
-  </ng-container>
+</mat-toolbar-row>
+<!-- Search Results Display -->
+<div class="container-fluid mt-2">
+  <div class="row mt-3">
+    <h3 style="margin-left: 50%;">{{ getTitleForSearchType() }}</h3>
+    <!-- <div *ngFor="let result of getResultsForSearchType()"> -->
+      <!-- <pre>{{ result | json }}</pre> -->
+    <!-- </div> -->
+  </div>
 </div>
