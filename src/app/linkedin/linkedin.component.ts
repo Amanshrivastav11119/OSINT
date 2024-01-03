@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LinkedinService } from '../service/linkedin.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-linkedin',
@@ -7,27 +8,58 @@ import { LinkedinService } from '../service/linkedin.service';
   styleUrls: ['./linkedin.component.css']
 })
 export class LinkedinComponent {
-  
- query: string;
+
+  query: string;
   searchType: string;
   connectionCountInput: string;
   extractUrl: string;
-  searchResults: any;
   searchResultsWithConnectionCount: any;
   extractedProfile: any;
   selectedSearchType: string;
+  searchResults: any[] = [];
 
-  constructor(private linkedinService: LinkedinService) {}
+  // Search placeholder functions
+  isFocused: boolean = false;
+  onFocus() {
+    this.isFocused = true;
+  }
+  onBlur() {
+    this.isFocused = false;
+  } 
+
+  constructor(private linkedinService: LinkedinService) { }
 
   search(): void {
-    this.linkedinService.search(this.query, this.searchType).subscribe(
-      (data) => {
-        this.searchResults = data;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+    this.linkedinService.search(this.query, this.searchType)
+      .pipe(
+        take(1)
+      )
+      .subscribe(
+        (initialData) => {
+          this.searchResults = [initialData];
+          this.fetchAdditionalResults(9);
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+  }
+
+  private fetchAdditionalResults(count: number): void {
+    for (let i = 0; i < count; i++) {
+      this.linkedinService.search(this.query, this.searchType)
+        .pipe(
+          take(1)
+        )
+        .subscribe(
+          (data) => {
+            this.searchResults = this.searchResults.concat(data.results);
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+    }
   }
 
   extract(): void {

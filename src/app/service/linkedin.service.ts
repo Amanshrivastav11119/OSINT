@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LinkedinService {
-  private rapidApiKey = '6edecb7bb9mshd599a23712cf880p1cf31fjsn25beaf1ae3ab';
+  private rapidApiKey = 'e058d5d7fbmshae22f7f2ddac844p19c7fajsn618c8d1fed35';
   private rapidApiHost = 'linkedin-profiles1.p.rapidapi.com';
 
   constructor(private http: HttpClient) { }

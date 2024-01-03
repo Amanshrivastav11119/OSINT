@@ -1,59 +1,53 @@
 <div>
+  <label>
+    Search Type:
+    <select [(ngModel)]="selectedSearchType">
+      <option value="search">Search</option>
+      <option value="connectionCount">Connection Count</option>
+      <option value="profileExtractor">Profile Extractor</option>
+    </select>
+  </label>
+
+  <div *ngIf="selectedSearchType === 'search'">
     <label>
-      Search Type:
-      <select [(ngModel)]="selectedSearchType">
-        <option value="search">Search</option>
-        <option value="connectionCount">Connection Count</option>
-        <option value="profileExtractor">Profile Extractor</option>
-      </select>
+      Enter search query:
+      <input type="text" class="form-control rounded-5 shadow transparent-bg" [class.input-highlight]="isFocused"
+        (keyup.enter)="search()" [(ngModel)]="query" placeholder="Enter search query" aria-label="Search Word"
+        aria-describedby="button-addon2" (focus)="onFocus()" (blur)="onBlur()" enableAutoComplete="true" />
     </label>
-  
-    <ng-container *ngIf="selectedSearchType === 'search'">
-      <div>
-        <label>
-          Enter search query:
-          <input type="text" [(ngModel)]="query" placeholder="Enter search query">
-        </label>
-      </div>
-      <div>
-        <label>
-          <input type="radio" [(ngModel)]="searchType" value="person"> Person
-        </label>
-        <label>
-          <input type="radio" [(ngModel)]="searchType" value="company"> Company
-        </label>
-        <button (click)="search()">Search</button>
-      </div>
-      <h3>Search Results</h3>
-      <pre>{{ searchResults | json }}</pre>
-    </ng-container>
-  
-    <ng-container *ngIf="selectedSearchType === 'profileExtractor'">
-      <div>
-        <label>
-          Enter LinkedIn profile URL:
-          <input type="text" [(ngModel)]="extractUrl" placeholder="Enter LinkedIn profile URL">
-        </label>
-      </div>
-      <div>
-        <button (click)="extract()">Extract Profile</button>
-      </div>
-      <h3>Extracted Profile</h3>
-      <pre>{{ extractedProfile | json }}</pre>
-    </ng-container>
-  
-    <ng-container *ngIf="selectedSearchType === 'connectionCount'">
-      <div>
-        <label>
-          Enter Connection Count:
-          <input type="text" [(ngModel)]="connectionCountInput" placeholder="Enter connection count">
-        </label>
-      </div>
-      <div>
-        <button (click)="searchWithConnectionCount()">Search with Connection Count</button>
-      </div>
-      <h3>Search Results with Connection Count</h3>
-      <pre>{{ searchResultsWithConnectionCount | json }}</pre>
-    </ng-container>
+
+    <label>
+      <input type="radio" [(ngModel)]="searchType" value="person"> Person
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="searchType" value="company"> Company
+    </label>
+    &nbsp;
+    &nbsp;
+
+    <button class="btn btn-outline-secondary" type="Search" id="Search-addon2" style="height:40px; width: 40px;"
+      (click)="search()">Search</button>
+
+    <h3>Search Results</h3>
+    <div *ngFor="let result of searchResults">
+      <pre>{{ result | json }}</pre>
+    </div>
   </div>
-  
+
+  <ng-container *ngIf="selectedSearchType !== 'search'">
+    <div>
+      <label>
+        Enter search query:
+        <input type="text" [(ngModel)]="query" placeholder="Enter search query">
+      </label>
+
+      <button (click)="search()">Search</button>
+    </div>
+
+    <h3>{{ selectedSearchType === 'connectionCount' ? 'Connection Count Results' : 'Profile Extractor Results' }}</h3>
+    <div
+      *ngFor="let result of (selectedSearchType === 'connectionCount' ? searchResultsWithConnectionCount : extractedProfile)">
+      <pre>{{ result | json }}</pre>
+    </div>
+  </ng-container>
+</div>
