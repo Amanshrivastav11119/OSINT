@@ -16,7 +16,7 @@ export class LinkedinComponent {
   searchResultsWithConnectionCount: any;
   extractedProfile: any;
   selectedSearchType: string;
-  searchResults: any[] = [];
+  searchResults: any[];
 
   // Search placeholder functions
   isFocused: boolean = false;
@@ -57,7 +57,7 @@ export class LinkedinComponent {
       (data) => {
         this.searchResults = data.data;
         console.log(data.data);
-        console.log(this.searchResults[1].title)
+        console.log(this.searchResults)
       },
       (error) => {
         console.error(error);

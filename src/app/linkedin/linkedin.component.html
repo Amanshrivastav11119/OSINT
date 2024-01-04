@@ -9,9 +9,9 @@
           <div class="input-group">
             <!-- search box -->
             <input type="text" class="form-control rounded-5 shadow transparent-bg" [class.input-highlight]="isFocused"
-              (keyup.enter)="search()" [(ngModel)]="query" [(ngModel)]="extractUrl"  [(ngModel)]="connectionCountInput"  placeholder="Enter search query"
-              aria-label="Search Word" aria-describedby="button-addon2" (focus)="onFocus()" (blur)="onBlur()"
-              enableAutoComplete="true" style="height: 50px; width: 200px;" />
+              (keyup.enter)="search()" [(ngModel)]="query" [(ngModel)]="extractUrl" [(ngModel)]="connectionCountInput"
+              placeholder="Enter search query" aria-label="Search Word" aria-describedby="button-addon2"
+              (focus)="onFocus()" (blur)="onBlur()" enableAutoComplete="true" style="height: 50px; width: 200px;" />
             &nbsp;
             &nbsp;
             <button class="btn btn-outline-secondary" type="Search" id="Search-addon2" style="height:40px; width: 40px;"
@@ -59,10 +59,11 @@
 <!-- Search Results Display -->
 <div class="container-fluid mt-2">
   <div class="row mt-3">
-    <h3 style="margin-left: 50%;">{{ getTitleForSearchType() }}</h3>
+
 
     <!-- Profile Extractor Results Display -->
     <div *ngIf="selectedSearchType === 'profileExtractor' && extractedProfile" class="profile-container">
+      <h3 style="margin-left: 50%;">{{ getTitleForSearchType() }}</h3>
       <!-- Profile Header Section -->
       <div class="profile-header">
         <div class="profile-picture">
@@ -113,13 +114,16 @@
 
     <!-- Connection Count Results Display -->
     <div *ngIf="selectedSearchType === 'connectionCount' && searchResultsWithConnectionCount">
+      <h3 style="margin-left: 50%;">{{ getTitleForSearchType() }}</h3>
       <!-- Display Connection Count Profile Picture and Name -->
       <div class="connection-profile-header">
         <div class="profile-picture">
-          <img src="{{ searchResultsWithConnectionCount.data.profilePicture }}" alt="Profile Picture" style="height: 200px; width: 200px;">
+          <img src="{{ searchResultsWithConnectionCount.data.profilePicture }}" alt="Profile Picture"
+            style="height: 200px; width: 200px;">
         </div>
         <div class="profile-name">
-          <h2>{{ searchResultsWithConnectionCount.data.firstName }} {{ searchResultsWithConnectionCount.data.lastName }}</h2>
+          <h2>Name : - {{ searchResultsWithConnectionCount.data.firstName }} {{ searchResultsWithConnectionCount.data.lastName }}
+          </h2>
         </div>
       </div>
       <!-- Display Connection Count Details -->
@@ -129,12 +133,10 @@
       </div>
       <!-- Display Connection Data -->
       <div class="connection-data">
-        <h4>{{ searchResultsWithConnectionCount.data.firstName }} {{ searchResultsWithConnectionCount.data.lastName }}
-        </h4>
-        <p>{{ searchResultsWithConnectionCount.data.headline }}</p>
-        <p>{{ searchResultsWithConnectionCount.data.geo.city }}, {{ searchResultsWithConnectionCount.data.geo.country }}
+        <p>Headline : -{{ searchResultsWithConnectionCount.data.headline }}</p>
+        <p>Address : -{{ searchResultsWithConnectionCount.data.geo.city }}, {{ searchResultsWithConnectionCount.data.geo.country }}
         </p>
-        <p>{{ searchResultsWithConnectionCount.data.summary }}</p>
+        <p>Summary : -{{ searchResultsWithConnectionCount.data.summary }}</p>
         <!-- Display Skills -->
         <div class="skills">
           <p><strong>Skills:</strong></p>
@@ -154,16 +156,17 @@
       </div>
     </div>
 
-    <!-- Company Search Results Display -->
-    <div *ngIf="selectedSearchType === 'company' && searchResults.length > 0">
-      <div class="company-results">
-        <div *ngFor="let company of searchResults">
-          <h4>{{ company.title }}</h4>
-          <p>{{ company.snippet }}</p>
-          <a [href]="company.url" target="_blank">Visit Company</a>
-        </div>
+    <!-- Assuming searchResults is an array with one result -->
+    <h3 class="company-title" *ngIf="searchResults && searchResults.length > 0">{{ getTitleForSearchType() }}</h3>
+    <div *ngIf="searchResults && searchResults.length > 0" class="company-result">
+      <h1 class="company-title">{{ searchResults[0].title }}</h1>
+      <div class="company-summary">
+        <p>{{ searchResults[0].snippet }}</p>
+      </div>
+      <div class="linkedin-link">
+        <p>LinkedIn Page: <a [href]="searchResults[0].url" target="_blank">{{ searchResults[0].url }}</a></p>
       </div>
     </div>
-    
+
   </div>
 </div>
