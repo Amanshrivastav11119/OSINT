@@ -18,7 +18,6 @@ import { ImageSearchComponent } from './image-search/image-search.component';
 import { GoogleTrendsSearchComponent } from './google-trends-search/google-trends-search.component';
 import { WhoisComponent } from './whois/whois.component';
 import { LinkedinComponent } from './linkedin/linkedin.component';
-
 const routes: Routes = [
    //Routes for components
    
