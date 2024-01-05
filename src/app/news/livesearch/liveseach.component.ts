@@ -407,15 +407,15 @@ export class LiveseachComponent {
   }
 
   // Function to extract distinct languages and countries
-  extractDistinctLanguagesAndCountries() {
+  extractDistinctLanguagesAndCountries(articles: any[]) {
     const uniqueCountries = new Set<string>();
     const uniqueLanguages = new Set<string>();
     // Clear previous data
     this.countries1 = [];
     this.languages1 = [];
-    for (const article of this.articles) {
+    for (const article of articles) {
       if (Array.isArray(article.country)) {
-        uniqueCountries.add(article.country[0]); // Assuming you want the first element if it's an array
+        uniqueCountries.add(article.country[0]);
       } else if (typeof article.country === 'string') {
         uniqueCountries.add(article.country);
       }
@@ -431,6 +431,7 @@ export class LiveseachComponent {
     });
   }
 
+
   // Function to add or remove an article from the selected list
   toggleSelectedArticle(article: any) {
     const index = this.articles.findIndex(item => item === article);
@@ -445,10 +446,9 @@ export class LiveseachComponent {
   //offline country filter
   setCountryFilter(country: string) {
     this.selectedCountryFilter = country;
-    // console.log(this.selectedCountryFilter);
-    // console.log(country);
     this.filterResults();
   }
+
 
   //offline language filter
   setLanguageFilter(language: string) {
@@ -491,8 +491,12 @@ export class LiveseachComponent {
         return { name };
       });
     } else {
-      // If 'All' is selected, show all available languages
-      this.extractDistinctLanguagesAndCountries();
+      /// Before calling extractDistinctLanguagesAndCountries
+      // console.log('Before extraction:', this.articles);
+      this.extractDistinctLanguagesAndCountries(this.articles);
+      // After calling extractDistinctLanguagesAndCountries
+      // console.log('After extraction:', this.articles);
+
     }
   }
 
@@ -583,7 +587,12 @@ export class LiveseachComponent {
 
           });
         }
-        this.extractDistinctLanguagesAndCountries();
+        // Before calling extractDistinctLanguagesAndCountries
+        // console.log('Before extraction:', this.articles);
+        this.extractDistinctLanguagesAndCountries(this.articles);
+        // After calling extractDistinctLanguagesAndCountries
+        // console.log('After extraction:', this.articles);
+        // console.log('Unique countries:', this.countries1);
         // Inside searchNews and nextPageNews functions, after getting data
         this.articles = data.results;
         this.filterResults();
@@ -595,6 +604,7 @@ export class LiveseachComponent {
   loadmorenews(query: string, nextpagetoken: string) {
     this.api.nextpage(query, nextpagetoken).subscribe(data => {
       this.newsData = data;
+      // console.log("News Data:", data);
       const newArticles = data.results;
       const pagetoken = data.nextPage;
       // Append new articles to the existing ones
@@ -617,7 +627,13 @@ export class LiveseachComponent {
         });
       }
       // Extract languages and countries again
-      this.extractDistinctLanguagesAndCountries();
+      // Before calling extractDistinctLanguagesAndCountries
+      // console.log('Before extraction:', this.articles);
+      this.extractDistinctLanguagesAndCountries(this.articles);
+      // After calling extractDistinctLanguagesAndCountries
+      // console.log('After extraction:', this.articles);
+      // console.log('Unique countries:', this.countries1);
+
     });
   }
 
