@@ -108,6 +108,7 @@ export class LinkedinComponent {
       (data) => {
         this.searchResults = data.data;
         console.log('Company Details Response:', this.searchResults);
+        console.log(this.searchResults[0].website);
         // Handle the company details data
       },
       (error) => {
