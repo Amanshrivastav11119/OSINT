@@ -89,18 +89,15 @@
     </button>
     &nbsp;
     &nbsp;
-    <button mat-button [matMenuTriggerFor]="welcomemenu" *ngIf="isAuthenticated()"
-      style="background-color: transparent; color: white;">
-      {{ welcomeMessage }}
-      <mat-icon>arrow_drop_down</mat-icon>
+    <button mat-button *ngIf="isAuthenticated()" style="background-color: transparent; color: white;"
+      (click)="logout()">
+      Logout
     </button>
-    <mat-menu #welcomemenu="matMenu" class="matMenu">
-      <button mat-menu-item (click)="logout()">Logout</button>
-    </mat-menu>
+    <button mat-icon-button *ngIf="isAuthenticated()" style="background-color: transparent; color: white;">
+      <mat-icon>account_circle</mat-icon>
+    </button>
   </mat-toolbar>
 </p>
-
-<p>{{ welcomeMessage }}</p>
 
 <!-- navbar closes -->
 <router-outlet></router-outlet>

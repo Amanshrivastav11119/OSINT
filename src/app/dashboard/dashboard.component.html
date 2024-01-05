@@ -16,9 +16,9 @@
       <div style="height: 400px;">
         <h3>News Count by Source</h3>
         <canvas baseChart [datasets]="[{ data: chartSourceData, label: 'News Count by Source' }]"
-        [labels]="chartSourceLabels" [options]="barChartOptions" [legend]="barChartLegend"
-        [plugins]="barChartPlugins" [type]="'bar'" style="height: 400px; width: 600px;">
-      </canvas>
+          [labels]="chartSourceLabels" [options]="barChartOptions" [legend]="barChartLegend" [plugins]="barChartPlugins"
+          [type]="'bar'" style="height: 400px; width: 600px;">
+        </canvas>
       </div>
     </div>
     <div style="width: 50%; margin: 10px;">
@@ -43,10 +43,11 @@
     </div>
   </div>
   <!-- News Table Visualizations -->
-  <div *ngIf="showTables">
+  <div *ngIf="showTables" style="margin: 0 78px;">
+    <h2 style="margin-left: 20px;">News Count by Country</h2>
     <div>
-      <h3>News Count by Country</h3>
-      <table>
+      <table style="width: 100%;">
+        <caption>News Count by Country</caption>
         <tr>
           <th>Country</th>
           <th>Count</th>
@@ -61,37 +62,9 @@
         </tr>
       </table>
     </div>
-    &nbsp;
-    &nbsp;
-    <div style="display: flex; flex-wrap: wrap;">
-      <div style="width: 50%;">
-        <h3>News Count by Source</h3>
-        <table>
-          <tr>
-            <th>Source</th>
-            <th>Count</th>
-          </tr>
-          <tr *ngFor="let source of chartLabels; let i = index">
-            <td>{{ source }}</td>
-            <td>{{ newsCountBySource[source] }}</td>
-          </tr>
-        </table>
-      </div>
-      <div style="width: 50%;">
-        <h3>News Count by Language</h3>
-        <table>
-          <tr>
-            <th>Language</th>
-            <th>Count</th>
-          </tr>
-          <tr *ngFor="let language of chartLanguageLabels; let i = index">
-            <td>{{ language }}</td>
-            <td>{{ newsCountByLanguage[language] }}</td>
-          </tr>
-        </table>
-      </div>
-    </div>
   </div>
+  
+  
   &nbsp;
   &nbsp;
   <!-- Top Headlines -->
