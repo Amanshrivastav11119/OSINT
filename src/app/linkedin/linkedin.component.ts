@@ -10,13 +10,15 @@ import { take } from 'rxjs/operators';
 export class LinkedinComponent {
 
   query: string;
-  searchType: string;
+  searchType: string = 'person';
   connectionCountInput: string;
   extractUrl: string;
   searchResultsWithConnectionCount: any;
   extractedProfile: any;
   selectedSearchType: string;
   searchResults: any[];
+  companyDetails: any; // Adjust the type based on the actual structure of the response
+  username: string = ''; // You might want to initialize your username property
 
   // Search placeholder functions
   isFocused: boolean = false;
@@ -48,24 +50,26 @@ export class LinkedinComponent {
       this.extract();
     } else if (this.selectedSearchType === 'connectionCount') {
       this.searchWithConnectionCount();
+    } else if (this.selectedSearchType === 'companyDetails') {
+      this.fetchCompanyDetails();
     }
   }
 
-  //profile search and company
+  // Profile search and company
   performSearch(): void {
-    this.linkedinService.search(this.query, this.searchType).subscribe(
+    this.linkedinService.search(this.query).subscribe(
       (data) => {
         this.searchResults = data.data;
         console.log(data.data);
-        console.log(this.searchResults)
+        console.log(this.searchResults);
       },
       (error) => {
         console.error(error);
-      } 
+      }
     );
   }
 
-  //profile extractor
+  // Profile extractor
   extract(): void {
     if (this.extractUrl) {
       this.linkedinService.extract(this.extractUrl).subscribe(
@@ -82,10 +86,10 @@ export class LinkedinComponent {
     }
   }
 
-  //connection coount
+  // Connection count
   searchWithConnectionCount(): void {
     console.log('Calling searchWithConnectionCount with username:', this.connectionCountInput);
-  
+
     this.linkedinService.getConnectionCount(this.connectionCountInput).subscribe(
       (data) => {
         console.log('Connection Count API Response:', data);
@@ -96,7 +100,22 @@ export class LinkedinComponent {
       }
     );
   }
-  
+
+  // Company details
+  fetchCompanyDetails() {
+    const username = this.username; // You can replace 'ibm' with the desired username
+    this.linkedinService.getCompanyDetails(username).subscribe(
+      (data) => {
+        this.searchResults = data.data;
+        console.log('Company Details Response:', this.searchResults);
+        // Handle the company details data
+      },
+      (error) => {
+        console.error('Error fetching company details:', error);
+        // Handle the error
+      }
+    );
+  }
 
   getTitleForSearchType(): string {
     return this.selectedSearchType === 'connectionCount' ? 'Connection Count Results' : 'Profile Extractor Results';
@@ -105,5 +124,4 @@ export class LinkedinComponent {
   getResultsForSearchType(): any[] {
     return this.selectedSearchType === 'connectionCount' ? this.searchResultsWithConnectionCount : this.extractedProfile;
   }
-
 }
