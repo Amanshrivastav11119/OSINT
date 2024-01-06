@@ -9,7 +9,7 @@ import { BlockchainService } from '../service/blockchain.service';
 export class BlockchainComponent {
 
   userInput: string;
-  selectedFunction: string;
+  selectedFunction: string = "Select Option";
   searchResult: any;
 
     // Search placeholder functions
@@ -25,19 +25,19 @@ export class BlockchainComponent {
 
   search(): void {
     switch (this.selectedFunction) {
-      case 'getBalance':
+      case 'Balance':
         this.getBalance(this.userInput);
         break;
-      case 'getMultiaddr':
+      case 'Multiple Address':
         this.getMultiaddr(this.userInput);
         break;
-      case 'getRawaddr':
+      case 'Single Address':
         this.getRawaddr(this.userInput);
         break;
-      case 'getRawtx':
+      case 'Single Transaction':
         this.getRawtx(this.userInput);
         break;
-      case 'getRawblock':
+      case 'Single Block':
         this.getRawblock(this.userInput);
         break;
       default:

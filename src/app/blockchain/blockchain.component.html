@@ -27,20 +27,19 @@
                         <span class="example-spacer"></span>
                         &nbsp;
                         &nbsp;
-                        <div style="background: transparent; height: 70px;">
-                            <mat-menu #functionMenu="matMenu">
-                              <button mat-menu-item (click)="selectFunction('getBalance')" [ngClass]="{'selected-option': selectedFunction === 'getBalance'}">Get Balance</button>
-                              <button mat-menu-item (click)="selectFunction('getMultiaddr')" [ngClass]="{'selected-option': selectedFunction === 'getMultiaddr'}">Get Multiaddr</button>
-                              <button mat-menu-item (click)="selectFunction('getRawaddr')" [ngClass]="{'selected-option': selectedFunction === 'getRawaddr'}">Get Rawaddr</button>
-                              <button mat-menu-item (click)="selectFunction('getRawtx')" [ngClass]="{'selected-option': selectedFunction === 'getRawtx'}">Get Rawtx</button>
-                              <button mat-menu-item (click)="selectFunction('getRawblock')" [ngClass]="{'selected-option': selectedFunction === 'getRawblock'}">Get Rawblock</button>
-                            </mat-menu>
+                        <mat-menu #functionMenu="matMenu" class="transparent-menu">
+                            <button mat-menu-item (click)="selectFunction('Balance')" value="Balance">Balance</button>
+                            <button mat-menu-item (click)="selectFunction('Multiple Address')" value="Multiple Address">Multiple Address</button>
+                            <button mat-menu-item (click)="selectFunction('Single Address')" value="Single Address">Single Address</button>
+                            <button mat-menu-item (click)="selectFunction('Single Transaction')" value="Single Transaction">Single Transaction</button>
+                            <button mat-menu-item (click)="selectFunction('Single Block')" value="Single Block">Single Block</button>
+                          </mat-menu>
                           
-                            <button mat-button [matMenuTriggerFor]="functionMenu" [ngClass]="{'selected-option': selectedFunction}">Choose Function</button>
-                          </div>
-                          
-                          
-                          
+                          <button mat-button [matMenuTriggerFor]="functionMenu"
+                                  class="btn text-bg-light p-3 py-2 btn-light border rounded-5 body-dropdown transparent-bg"
+                                  style="height:40px; width: 150px;">
+                            {{ selectedFunction !== 'selectFunction' ? selectedFunction : 'Choose Function' }}
+                          </button>
                     </div>
                 </div>
             </div>
