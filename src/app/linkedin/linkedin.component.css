@@ -242,6 +242,21 @@
     color: red;
   }
   
+  .transparent-menu {
+    background-color: transparent !important;
+    color: white !important;
+  }
+  
+  .transparent-menu button {
+    color: white !important;
+  }
+  
+  
+  .mat-toolbar.mat-primary {
+    background: #007bff;
+    color: #fff;
+  }
+
   /* Add this code to your component's CSS file */
 .profile-container {
   border: 1px solid #ccc;
