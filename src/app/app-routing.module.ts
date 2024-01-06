@@ -18,6 +18,7 @@ import { ImageSearchComponent } from './image-search/image-search.component';
 import { GoogleTrendsSearchComponent } from './google-trends-search/google-trends-search.component';
 import { WhoisComponent } from './whois/whois.component';
 import { LinkedinComponent } from './linkedin/linkedin.component';
+import { BlockchainComponent } from './blockchain/blockchain.component';
 const routes: Routes = [
    //Routes for components
    
@@ -43,6 +44,7 @@ const routes: Routes = [
   { path: 'googletrend', component: GoogleTrendsSearchComponent ,canActivate: [authGuard]},
   { path: 'whois', component: WhoisComponent ,canActivate: [authGuard]},
   { path: 'linkedin', component: LinkedinComponent ,canActivate: [authGuard]},
+  { path: 'blockchain', component: BlockchainComponent ,canActivate: [authGuard]},
 
 ];
 

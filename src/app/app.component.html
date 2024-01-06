@@ -72,6 +72,11 @@
       Linkedin</button>
     &nbsp;
     &nbsp;
+    <button class="blockchain" [routerLink]="['/blockchain']" *ngIf="isAuthenticated()"
+      style="background-color: transparent; color: white;">
+      Blockchain</button>
+    &nbsp;
+    &nbsp;
     <!-- <button class="telegram" [routerLink]="['/telegram']" *ngIf="isAuthenticated()" style="background-color: transparent; color: white;">
       Telegram</button>
     &nbsp;

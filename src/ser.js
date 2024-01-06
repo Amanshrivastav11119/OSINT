@@ -52,6 +52,62 @@ app.get('/google-trends-search', async (req, res) => {
     });
   }
 });
+// Handle GET requests for /balance
+app.get('/balance', async (req, res) => {
+  try {
+    const { active } = req.query;
+    const response = await axios.get(`https://blockchain.info/balance?active=${active}`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Handle GET requests for /multiaddr
+app.get('/multiaddr', async (req, res) => {
+  try {
+    const { active } = req.query;
+    const response = await axios.get(`https://blockchain.info/multiaddr?active=${active}`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Handle GET requests for /rawaddr
+app.get('/rawaddr', async (req, res) => {
+  try {
+    const { address } = req.query;
+    const response = await axios.get(`https://blockchain.info/rawaddr/${address}`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Handle GET requests for /rawtx
+app.get('/rawtx', async (req, res) => {
+  try {
+    const { txid } = req.query;
+    const response = await axios.get(`https://blockchain.info/rawtx/${txid}`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Handle GET requests for /rawblock
+app.get('/rawblock', async (req, res) => {
+  try {
+    const { blockhash } = req.query;
+    const response = await axios.get(`https://blockchain.info/rawblock/${blockhash}`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

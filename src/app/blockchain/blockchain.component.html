@@ -1,0 +1,50 @@
+<!-- Second Toolbar -->
+<mat-toolbar-row style="height: 80px;">
+    &nbsp;
+    &nbsp;
+    <div class="py-4">
+        <div class="container-fluid px-6">
+            <div class="row align-items-center">
+                <div class="col-xl">
+                    <div class="input-group">
+                        <!-- search box -->
+                        <input type="text" class="form-control rounded-5 shadow transparent-bg"
+                            [class.input-highlight]="isFocused" (keyup.enter)="search()" [(ngModel)]="userInput"
+                            placeholder="Enter search query" aria-label="Search Word" aria-describedby="button-addon2"
+                            (focus)="onFocus()" (blur)="onBlur()" enableAutoComplete="true"
+                            style="height: 50px; width: 200px;" />
+                        &nbsp;
+                        &nbsp;
+                        <button class="btn btn-outline-secondary" type="Search" id="Search-addon2"
+                            style="height: 40px; width: 40px;" (click)="search()">
+                            <!-- search logo -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-search" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </button>
+                        <span class="example-spacer"></span>
+                        &nbsp;
+                        &nbsp;
+                        <div style="background: transparent; height: 70px;">
+                            <mat-menu #functionMenu="matMenu">
+                              <button mat-menu-item (click)="selectFunction('getBalance')" [ngClass]="{'selected-option': selectedFunction === 'getBalance'}">Get Balance</button>
+                              <button mat-menu-item (click)="selectFunction('getMultiaddr')" [ngClass]="{'selected-option': selectedFunction === 'getMultiaddr'}">Get Multiaddr</button>
+                              <button mat-menu-item (click)="selectFunction('getRawaddr')" [ngClass]="{'selected-option': selectedFunction === 'getRawaddr'}">Get Rawaddr</button>
+                              <button mat-menu-item (click)="selectFunction('getRawtx')" [ngClass]="{'selected-option': selectedFunction === 'getRawtx'}">Get Rawtx</button>
+                              <button mat-menu-item (click)="selectFunction('getRawblock')" [ngClass]="{'selected-option': selectedFunction === 'getRawblock'}">Get Rawblock</button>
+                            </mat-menu>
+                          
+                            <button mat-button [matMenuTriggerFor]="functionMenu" [ngClass]="{'selected-option': selectedFunction}">Choose Function</button>
+                          </div>
+                          
+                          
+                          
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-toolbar-row>
+<pre>{{ searchResult | json }}</pre>
