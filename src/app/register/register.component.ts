@@ -14,7 +14,6 @@ export class RegisterComponent {
 
   showPassword = false;
   showConfirmPassword = false;
-
   registerForm: FormGroup;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
@@ -38,7 +37,7 @@ export class RegisterComponent {
     return this.registerForm.get('confirmPassword');
   }
 
-  get role(){
+  get role() {
     return this.registerForm.get('role');
   }
 
@@ -60,6 +59,8 @@ export class RegisterComponent {
     console.log('Post Data:', postData);
     this.authService.registerUser(postData).subscribe(
       () => {
+        // Save the username to local storage
+        localStorage.setItem('username', postData.username);
         this.router.navigate(['login']);
       },
       (error) => {
@@ -67,12 +68,12 @@ export class RegisterComponent {
       }
     );
   }
-  
 
   private initializeForm() {
     this.registerForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z]+(?: [a-zA-Z]+)*$/)]],
       email: ['', [Validators.required, Validators.email]],
+      username: ['', Validators.required], // Add username field
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
       role: ['']

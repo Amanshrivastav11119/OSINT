@@ -41,9 +41,15 @@ export class LoginComponent {
         console.log('Login Response:', response);
         sessionStorage.setItem('email', email as string);
         localStorage.setItem('islogin', 'true');
-        // Store the user details in localStorage
         localStorage.setItem('loggedInUser', JSON.stringify(response.user));
         localStorage.setItem('role', response.user.role);
+
+        // Check if 'username' is present in the response before saving it
+        if ('username' in response.user) {
+          localStorage.setItem('username', response.user.username);
+          console.log(response.user.username);
+        }
+
         this.router.navigate(['/dashboard']);
       },
       error => {
@@ -53,7 +59,6 @@ export class LoginComponent {
     );
   }
 
-  
   // Logout functionality
   logout(): void {
     this.authService.logout();

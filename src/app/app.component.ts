@@ -37,7 +37,6 @@ export class AppComponent {
       this.cdr.detectChanges(); // Add this line
     }
   }
-
   
   toggleFullscreen() {
     const element = document.documentElement;
@@ -57,4 +56,15 @@ export class AppComponent {
     // Redirect to the login page after logout
     this.router.navigate(['/login']);
   }
+
+  getUsernameFromLocalStorage(): string {
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      // console.log(user);
+      return user.username;
+    }
+    return '';
+  }
+  
 }

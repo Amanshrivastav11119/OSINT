@@ -1,7 +1,6 @@
 <!-- navbar starts -->
 <ngx-loading-bar [includeSpinner]='false' height="4px"></ngx-loading-bar>
-<p>
-  <mat-toolbar class="toolbar">
+  <mat-toolbar class="toolbar" fxLayout="row" fxLayoutGap="10px">
     <a class="navbar-brand">
       <!-- logo -->
       <img src="../assets/logo.svg" alt="Logo" width="50" height="50">
@@ -13,6 +12,7 @@
       <span>OSINT</span>
       &nbsp;
     </a>
+    <span fxFlex></span>
     <!-- menu button -->
     <button class="dashboard" [routerLink]="['/dashboard']" *ngIf="isAuthenticated()"
       style="background-color: transparent; color: white;">
@@ -98,11 +98,17 @@
       (click)="logout()">
       Logout
     </button>
-    <button mat-icon-button *ngIf="isAuthenticated()" style="background-color: transparent; color: white;">
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" *ngIf="isAuthenticated()">
       <mat-icon>account_circle</mat-icon>
     </button>
+    <!-- User menu -->
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item disabled>Welcome {{getUsernameFromLocalStorage()}}</button>
+      <!-- Add other menu items as needed -->
+      <button mat-menu-item (click)="logout()">Logout</button>
+    </mat-menu>
+  
   </mat-toolbar>
-</p>
 
 <!-- navbar closes -->
 <router-outlet></router-outlet>

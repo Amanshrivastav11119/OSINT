@@ -83,7 +83,8 @@ const userSchema = new mongoose.Schema({
   fullName: String,
   email: String,
   password: String,
-  role: { type: String, enum: ['admin', 'user'] }
+  role: { type: String, enum: ['admin', 'user'] },
+  username: String, // Include the 'username' field in the schema
 });
 
 const News = mongoose.model('News', newsSchema);
@@ -198,10 +199,9 @@ app.get('/api/pdf/:filename', (req, res) => {
 // API endpoint to register a new user
 app.post('/api/users', async (req, res) => {
   try {
-    const { email, password, role } = req.body;
-    console.log('Received role:', role);
+    const { email, password, role, username } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPassword, role });
+    const newUser = new User({ email, password: hashedPassword, role, username }); // Include username
     await newUser.save();
     res.status(201).json({ message: 'User registered successfully.' });
   } catch (error) {
@@ -221,13 +221,13 @@ app.post('/api/users/login', async (req, res) => {
     if (!isPasswordMatch) {
       return res.status(401).json({ message: 'Incorrect email or password.' });
     }
-    // Include the user role in the response
-    const { _id, fullName, email: userEmail, role } = user;
-    res.status(200).json({ message: 'Login successful.', user: { _id, fullName, email: userEmail, role } });
+    const { _id, fullName, email: userEmail, role, username } = user;
+    res.status(200).json({ message: 'Login successful.', user: { _id, fullName, email: userEmail, role, username } });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error.' });
   }
 });
+
 
 // API Endpoint to fetch news from MongoDB based on keywords
 app.get('/api/news/:keywords', (req, res) => {

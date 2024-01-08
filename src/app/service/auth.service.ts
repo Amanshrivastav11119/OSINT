@@ -34,7 +34,7 @@ export class AuthService {
     const userJson = localStorage.getItem('loggedInUser');
     return userJson ? JSON.parse(userJson) : null;
   }
-
+  
   private setupWindowEventListener(): void {
     window.addEventListener('beforeunload', (event) => {
       this.logout();
