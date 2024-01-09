@@ -25,7 +25,7 @@ export class FacebookComponent {
   searchData() {
     this.facebookService.searchFacebookData(this.searchKeywords).subscribe((data) => {
       this.searchResults = data;
-      console.log(data);
+      // console.log(data);
     });
   }
 

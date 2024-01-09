@@ -57,6 +57,7 @@
     "ng2-charts": "^5.0.3",
     "ngx-bootstrap": "^11.0.2",
     "ngx-extended-pdf-viewer": "^18.1.8",
+    "ngx-masonry": "^14.0.1",
     "ngx-pagination": "^6.0.3",
     "pdf-lib": "^1.17.1",
     "pdfcrowd": "^5.15.0",
