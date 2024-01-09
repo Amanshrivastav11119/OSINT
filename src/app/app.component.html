@@ -103,7 +103,7 @@
     </button>
     <!-- User menu -->
     <mat-menu #userMenu="matMenu">
-      <button mat-menu-item disabled>Welcome {{getUsernameFromLocalStorage()}}</button>
+      <div mat-menu-item >Welcome {{getUsernameFromLocalStorage()}}</div>
       <!-- Add other menu items as needed -->
       <button mat-menu-item (click)="logout()">Logout</button>
     </mat-menu>

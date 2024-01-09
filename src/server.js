@@ -80,6 +80,7 @@ const elibrarySchema = new mongoose.Schema({
 // user data schema
 const userSchema = new mongoose.Schema({
   id: String,
+  userId: { type: String, unique: true, required: true, },
   fullName: String,
   email: String,
   password: String,
@@ -87,6 +88,14 @@ const userSchema = new mongoose.Schema({
   username: String, // Include the 'username' field in the schema
 });
 
+const newsKeywordSchema = new mongoose.Schema({
+  group_name: String,
+  group_id: String,
+  keywords: [{ searchEnabled: Boolean, word: String }],
+});
+
+
+const NewsKeyword = mongoose.model('NewsKeyword', newsKeywordSchema);
 const News = mongoose.model('News', newsSchema);
 const Youtube = mongoose.model('Youtube', youtubeSchema);
 const Elibrary = mongoose.model('Elibrary', elibrarySchema, 'elibrary');
@@ -130,22 +139,23 @@ app.get('/api/news', async (req, res) => {
   const language = req.query.language; // Extract the language from the request query parameters
   try {
     let pipeline = [];
-    if (searchTerm && language) {
+
+    if (searchTerm) {
+      // If a search term is provided, search by keywords
       pipeline.push(
         {
-          $match: {
-            $and: [
-              { title: { $regex: searchTerm, $options: 'i' } },
-              { language: language }
-            ]
-          }
+          $match: { title: { $regex: searchTerm, $options: 'i' } }
         }
       );
-    } else if (searchTerm) {
+    } else {
+      // If no search term is provided, fetch top 50 news
       pipeline.push(
-        { $match: { title: { $regex: searchTerm, $options: 'i' } } }
+        { $sort: { publishedAt: -1 } }, // Sort by publishedAt in descending order
+        { $limit: 100 }
       );
-    } else if (language) {
+    }
+    if (language) {
+      // Add language filter if language is provided
       pipeline.push(
         { $match: { language: language } }
       );
@@ -154,6 +164,7 @@ app.get('/api/news', async (req, res) => {
       { $group: { _id: "$title", doc: { $first: "$$ROOT" } } },
       { $replaceWith: "$doc" }
     );
+
     const newsData = await News.aggregate(pipeline);
     res.json(newsData); // Send the data as a JSON response
   } catch (error) {
@@ -196,18 +207,27 @@ app.get('/api/pdf/:filename', (req, res) => {
   }
 });
 
+// Generate unique userId (incrementing ID)
+let currentUserId = 0;
+function generateUniqueUserId() {
+  currentUserId++;
+  return currentUserId.toString().padStart(3, '0');
+}
+
 // API endpoint to register a new user
 app.post('/api/users', async (req, res) => {
   try {
     const { email, password, role, username } = req.body;
+    const userId = generateUniqueUserId();
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPassword, role, username }); // Include username
+    const newUser = new User({ email, password: hashedPassword, role, username, userId });
     await newUser.save();
     res.status(201).json({ message: 'User registered successfully.' });
   } catch (error) {
     res.status(400).json({ message: 'Registration failed.' });
   }
 });
+
 
 // API endpoint to handle user login
 app.post('/api/users/login', async (req, res) => {
@@ -248,6 +268,22 @@ app.get('/api/news/:keywords', (req, res) => {
       }
     }
   );
+});
+
+// Define a route to handle POST requests for groups and keywords
+app.post('/api/newskeyword', async (req, res) => {
+  try {
+    const { keywords, group_name, group_id } = req.body;
+    // Create a new document based on the incoming request data
+    const newsKeyword = new NewsKeyword({ group_name, group_id, keywords });
+    // Save the document to the database
+    await newsKeyword.save();
+    // Send a JSON response
+    res.status(200).json({ message: 'Keywords and groups saved to MongoDB' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error saving keywords and groups to MongoDB');
+  }
 });
 
 // console.log('__dirname:', __dirname);

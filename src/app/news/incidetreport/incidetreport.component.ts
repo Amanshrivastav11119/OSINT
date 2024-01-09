@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { NewsapiService } from '../../service/newsapi.service'
+import { NewsapiService } from '../../service/newsapi.service';
 import { MatDialog } from '@angular/material/dialog';
 import { IncidentReportDialogComponent } from '../../incident-report-dialog/incident-report-dialog.component';
 import { saveAs } from 'file-saver';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 import * as JSZip from 'jszip';
+
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-incidetreport',
@@ -24,21 +25,22 @@ export class IncidetreportComponent implements OnInit {
   languages: string[] = [];
   selectedArticles: any[] = [];
   showNoDataMessage: boolean = false;
-  selectedKeywords: { keyword: string; group: string }[] = [];  // Modified this line
+  selectedKeywords: { keyword: string; group: string }[] = [];
 
-  // search placeholder functions
   isFocused: boolean = false;
+
   onFocus() {
     this.isFocused = true;
   }
+
   onBlur() {
     this.isFocused = false;
   }
+
   isArticleSelected(article: any) {
     return this.selectedArticles.includes(article);
   }
 
-  //export news as text in zip
   exportNewsAsText(article: any) {
     const exportData = `Title: ${article.title}\n\nContent: ${article.content}\n\n\n`;
     const blob = new Blob([exportData], { type: 'text/plain;charset=utf-8' });
@@ -47,6 +49,7 @@ export class IncidetreportComponent implements OnInit {
       resolve();
     });
   }
+
   exportAllNewsAsText(searchQuery: string) {
     const zip = new JSZip();
     const promises = [];
@@ -65,7 +68,6 @@ export class IncidetreportComponent implements OnInit {
     });
   }
 
-  //export news as pdf in zip
   exportNewsAsPdf(article: any) {
     const documentDefinition = {
       content: [
@@ -80,6 +82,7 @@ export class IncidetreportComponent implements OnInit {
       });
     });
   }
+
   exportAllNewsAsPdf(searchQuery: string) {
     const zip = new JSZip();
     const promises = [];
@@ -105,7 +108,6 @@ export class IncidetreportComponent implements OnInit {
     });
   }
 
-  // Function to add or remove an article from the selected list
   toggleSelectedArticle(article: any) {
     const index = this.newsData.findIndex((item: any) => item === article);
     if (index !== -1) {
@@ -113,7 +115,6 @@ export class IncidetreportComponent implements OnInit {
     }
   }
 
-  // Extract language
   extractDistinctLanguagesAndCountries() {
     const uniqueLanguages = new Set<string>();
     for (const article of this.incidentData) {
@@ -124,37 +125,14 @@ export class IncidetreportComponent implements OnInit {
     this.languages = Array.from(uniqueLanguages);
   }
 
-  // Show search query
   getValue(val: string) {
     this.searchTerm = val;
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.loadSavedNews();
+  }
 
-  //incident search online api
-  // searchNews(query: string, selectedLanguage: string) {
-  //   this.api.incidentews(query, selectedLanguage).subscribe(data => {
-  //     this.newsData = data.articles;
-  //     console.log("News Data:", data);
-  //     // console.log(this.newsData);
-  // console.log(data.articles[0].title);
-  // console.log(this.articles);
-  //save to mongodb api
-  //     for (const article of this.newsData) {
-  //       this.api.saveToMongoDB(article).subscribe({
-  //         next: response => {
-  //           console.log('Data saved to MongoDB:', response);
-  //         },
-  //         error: error => {
-  //           // console.error('Error saving data to MongoDB:', error);
-  //         }
-  //       });
-  //     }
-
-  //   });
-  // }
-
-  //Incident news offline api
   searchNews() {
     this.api.getNews(this.searchTerm, this.selectedLanguage).subscribe(
       (data) => {
@@ -164,23 +142,19 @@ export class IncidetreportComponent implements OnInit {
           this.extractDistinctLanguagesAndCountries();
         } else {
           this.newsData = [];
-          // this.showNoDataMessage = true; // You can uncomment this if needed
         }
       },
       (error) => {
         console.error('Error fetching news data:', error);
-        // Handle the error if needed
       }
     );
   }
 
-  // Modify the language method
   language(optionlang: string) {
     this.selectedLanguage = optionlang;
-    this.fetchNewsByKeywords(); // Modified this line
+    // Don't call fetchNewsByKeywords here, let the user initiate it separately
   }
 
-  // Add a method to search news by keywords
   searchNewsByKeywords(keywords: string[]) {
     this.api.getNewsByKeywords(keywords).subscribe(
       (data) => {
@@ -190,17 +164,14 @@ export class IncidetreportComponent implements OnInit {
           this.extractDistinctLanguagesAndCountries();
         } else {
           this.newsData = [];
-          // Handle the case when no data is found
         }
       },
       (error) => {
         console.error('Error fetching news data by keywords:', error);
-        // Handle the error if needed
       }
     );
   }
 
-  // Fetch news based on selected keywords
   fetchNewsByKeywords() {
     const keywords = this.selectedKeywords.map(keyword => keyword.keyword);
     this.api.getNews(keywords.join(','), this.selectedLanguage).subscribe(
@@ -219,7 +190,23 @@ export class IncidetreportComponent implements OnInit {
     );
   }
 
-  // Function to add or remove a keyword from the selected list
+  loadSavedNews() {
+    this.api.getAllNewsFromMongo().subscribe(
+      (data) => {
+        if (data && data.length > 0) {
+          this.newsData = data;
+          this.incidentData = data;
+          this.extractDistinctLanguagesAndCountries();
+        } else {
+          this.newsData = [];
+        }
+      },
+      (error) => {
+        console.error('Error fetching saved news data:', error);
+      }
+    );
+  }
+
   toggleSelectedKeyword(keywordObj: { keyword: string; group: string }) {
     const index = this.selectedKeywords.findIndex(k => k.keyword === keywordObj.keyword && k.group === keywordObj.group);
     if (index !== -1) {
@@ -229,21 +216,16 @@ export class IncidetreportComponent implements OnInit {
     }
   }
 
-  // Method to open the keyword dialog
   openDialog(): void {
     const dialogRef = this.dialog.open(IncidentReportDialogComponent, {
       width: '1000px',
     });
-    // Handle the dialog closed event
     dialogRef.afterClosed().subscribe((selectedKeywords: { keyword: string; group: string }[]) => {
-      // Check if selectedKeywords is not undefined
       if (selectedKeywords) {
-        // Update the selectedKeywords in the component
         this.selectedKeywords = selectedKeywords;
-        // Perform the news search with the selected keywords
-        this.searchNews();
+        this.fetchNewsByKeywords(); // Call the function when the dialog is closed with selected keywords
       }
     });
   }
-
 }
+  

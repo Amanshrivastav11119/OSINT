@@ -16,7 +16,6 @@ export class NewsapiService {
   private apikey = '548c78746d234b3d95b0eb26278421c2';  // incident report api key
   private serverUrl = 'http://localhost:3000/api/news';  //mongo db api url don't change this
 
-
   //live-search api
   topheadlines(query: string, countrycode?: string, languagecode?: string,): Observable<any> {
     let params = new HttpParams().set('apikey', this.apiKey).set('image', 1).set('q', query);
@@ -71,7 +70,8 @@ export class NewsapiService {
       catchError(this.handleError)
     );
   }
-
+  
+  
   private handleError(error: any) {
     console.error('An error occurred:', error);
     return throwError(error);
@@ -83,6 +83,20 @@ export class NewsapiService {
     newsData.country = newsData.country[0];
     newsData.searchQuery = searchQuery; // Add the searchQuery field
     return this._http.post(this.serverUrl, newsData);
+  }
+
+  getKeywordsAndGroups(): Observable<any> {
+    return this._http.get<any>(`${this.serverUrl}/keywords-and-groups`);
+  }
+
+  saveKeywordsAndGroups(keywords: any[], groups: string[]): Observable<any> {
+    const url = 'http://localhost:3000/api/newskeyword';  // Update the URL accordingly
+    return this._http.post<any>(url, { keywords, groups }).pipe(
+      catchError((error) => {
+        console.error('Error saving keywords and groups to the backend:', error);
+        return throwError('Error saving keywords and groups to the backend');
+      })
+    );
   }
 
 }
