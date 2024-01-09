@@ -284,8 +284,7 @@ app.post('/api/newskeyword', async (req, res) => {
   }
 });
 
-//facebook
-
+//API endpoint to handle facebook
 app.get('/api/facebook/news', async (req, res) => {
   const keywords = req.query.keywords;
   try {
@@ -296,7 +295,6 @@ app.get('/api/facebook/news', async (req, res) => {
     res.status(500).send('Error fetching data from MongoDB');
   }
 });
-
 
 // console.log('__dirname:', __dirname);
 // // Specify the path to your SSL/TLS certificates
