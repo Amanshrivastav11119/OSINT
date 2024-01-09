@@ -38,7 +38,7 @@ export class LoginComponent {
     const { email, password } = this.loginForm.value;
     this.authService.loginUser(email as string, password as string).subscribe(
       response => {
-        console.log('Login Response:', response);
+        // console.log('Login Response:', response);
         sessionStorage.setItem('email', email as string);
         localStorage.setItem('islogin', 'true');
         localStorage.setItem('loggedInUser', JSON.stringify(response.user));
@@ -47,7 +47,7 @@ export class LoginComponent {
         // Check if 'username' is present in the response before saving it
         if ('username' in response.user) {
           localStorage.setItem('username', response.user.username);
-          console.log(response.user.username);
+          // console.log(response.user.username);
         }
 
         this.router.navigate(['/dashboard']);
