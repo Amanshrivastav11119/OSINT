@@ -6,16 +6,13 @@ const port = 3000;
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
-const https = require('https');// for https
+const https = require('https');
 
-// Middleware to parse JSON requests+
 app.use(express.json());
 
-// Allow requests from multiple origins
-const allowedOrigins = ['http://192.168.130.176:4200', 'http://localhost:4200'];  //change here for https or https
+const allowedOrigins = ['http://192.168.130.176:4200', 'http://localhost:4200'];
 const corsOptions = {
   origin: function (origin, callback) {
-    // Check if the origin is allowed or if it is a request from the same origin
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -23,19 +20,18 @@ const corsOptions = {
     }
   },
 };
-app.use(cors(corsOptions)); //change here for ssl or without ssl
+app.use(cors(corsOptions));
 
-// Connecting to MongoDB database
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong!');
 });
 
 // Connect to MongoDB (replace <YOUR_MONGODB_URI> with your actual URI)
-// mongoose.connect('mongodb://localhost:27017', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect('mongodb://192.168.130.34:27019/osint3', { useNewUrlParser: true, useUnifiedTopology: true });
+const db1 = mongoose.createConnection('mongodb://192.168.130.34:27019/osint3', { useNewUrlParser: true, useUnifiedTopology: true });
+const db2 = mongoose.createConnection('mongodb://192.168.130.34:27019/facebook', { useNewUrlParser: true, useUnifiedTopology: true });
 
-// Define a Mongoose schema and model for your data (e.g., News)
+
 const newsSchema = new mongoose.Schema({
   title: String,
   content: String,
@@ -46,22 +42,20 @@ const newsSchema = new mongoose.Schema({
   source_id: String,
   pubDate: String,
   country: String,
-  searchQuery: String// Add search keyword field
+  searchQuery: String
 });
 
-// Define a Mongoose schema and model for your data (e.g., Youtube)
 const youtubeSchema = new mongoose.Schema({
   videoID: String,
   title: String,
-  channelName: String,      // Add channel name field
-  publishedDate: String,   // Add published date field
-  description: String,      // Add description field
-  searchQuery: String,       // Add search query field
+  channelName: String,
+  publishedDate: String,
+  description: String,
+  searchQuery: String,
   fullDescription: String,
   tags: Object
 });
 
-//elibrary schema
 const elibrarySchema = new mongoose.Schema({
   meta_CreationDate: String,
   filename: String,
@@ -74,18 +68,16 @@ const elibrarySchema = new mongoose.Schema({
   cover: String,
   published_Date: String,
   site_Title: String,
-  // Add other properties as needed
 });
 
-// user data schema
 const userSchema = new mongoose.Schema({
   id: String,
-  userId: { type: String, unique: true, required: true, },
+  userId: { type: String, unique: true, required: true },
   fullName: String,
   email: String,
   password: String,
   role: { type: String, enum: ['admin', 'user'] },
-  username: String, // Include the 'username' field in the schema
+  username: String
 });
 
 const newsKeywordSchema = new mongoose.Schema({
@@ -95,11 +87,18 @@ const newsKeywordSchema = new mongoose.Schema({
 });
 
 
-const NewsKeyword = mongoose.model('NewsKeyword', newsKeywordSchema);
-const News = mongoose.model('News', newsSchema);
-const Youtube = mongoose.model('Youtube', youtubeSchema);
-const Elibrary = mongoose.model('Elibrary', elibrarySchema, 'elibrary');
-const User = mongoose.model('User', userSchema);
+const facebookSchema = new mongoose.Schema({
+  description: String,
+  imagehash_0: String,
+  title: String,
+});
+
+const Facebook = db2.model('Facebook', facebookSchema, 'facebook_collection');
+const NewsKeyword = db1.model('NewsKeyword', newsKeywordSchema);
+const News = db1.model('News', newsSchema);
+const Youtube = db1.model('Youtube', youtubeSchema);
+const Elibrary = db1.model('Elibrary', elibrarySchema, 'elibrary');
+const User = db1.model('User', userSchema);
 
 // Define a route to handle POST requests
 
@@ -228,7 +227,6 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
-
 // API endpoint to handle user login
 app.post('/api/users/login', async (req, res) => {
   try {
@@ -285,6 +283,20 @@ app.post('/api/newskeyword', async (req, res) => {
     res.status(500).send('Error saving keywords and groups to MongoDB');
   }
 });
+
+//facebook
+
+app.get('/api/facebook/news', async (req, res) => {
+  const keywords = req.query.keywords;
+  try {
+    const searchData = await Facebook.find({ description: { $regex: keywords, $options: 'i' } });
+    res.json(searchData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching data from MongoDB');
+  }
+});
+
 
 // console.log('__dirname:', __dirname);
 // // Specify the path to your SSL/TLS certificates

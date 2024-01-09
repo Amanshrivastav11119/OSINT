@@ -1,1 +1,9 @@
-<p>facebook works!</p>
+<div>
+    <input [(ngModel)]="searchKeywords" placeholder="Enter keywords" />
+    <button (click)="searchData()">Search</button>
+    <div *ngFor="let item of searchResults">
+      <!-- Display the search results as needed -->
+      {{ item.title }} - {{ item.description }}
+    </div>
+  </div>
+  
