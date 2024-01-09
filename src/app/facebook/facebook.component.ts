@@ -11,6 +11,15 @@ export class FacebookComponent {
   searchKeywords: string = '';
   searchResults: any[] = [];
 
+   // Search placeholder functions
+   isFocused: boolean = false;
+   onFocus() {
+     this.isFocused = true;
+   }
+   onBlur() {
+     this.isFocused = false;
+   }
+
   constructor(private facebookService: FacebookService) {}
 
   searchData() {

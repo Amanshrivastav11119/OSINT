@@ -1,9 +1,40 @@
-<div>
-    <input [(ngModel)]="searchKeywords" placeholder="Enter keywords" />
-    <button (click)="searchData()">Search</button>
-    <div *ngFor="let item of searchResults">
-      <!-- Display the search results as needed -->
-      {{ item.title }} - {{ item.description }}
+<!-- Second Toolbar -->
+<mat-toolbar-row style="height: 80px;">
+  &nbsp;
+  &nbsp;
+  <div class="py-4">
+    <div class="container-fluid px-6">
+      <div class="row align-items-center">
+        <div class="col-xl">
+          <div class="input-group">
+            <!-- search box -->
+            <input type="text" class="form-control rounded-5 shadow transparent-bg" [class.input-highlight]="isFocused"
+              (keyup.enter)="searchData()" [(ngModel)]="searchKeywords" placeholder="Enter search query" aria-label="Search Word"
+              aria-describedby="button-addon2" (focus)="onFocus()" (blur)="onBlur()" enableAutoComplete="true"
+              style="height: 50px; width: 200px;" />
+            &nbsp;
+            &nbsp;
+            <button class="btn btn-outline-secondary" type="Search" id="Search-addon2"
+              style="height: 40px; width: 40px;" (click)="searchData()">
+              <!-- search logo -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
+                <path
+                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+              </svg>
+            </button>
+            <span class="example-spacer"></span>
+            &nbsp;
+            &nbsp;
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  
+</mat-toolbar-row>
+<div>
+  <div *ngFor="let item of searchResults">
+    <!-- Display the search results as needed -->
+    {{ item.title }} - {{ item.description }}
+  </div>
+</div>
