@@ -70,7 +70,7 @@ export class BlockchainComponent {
         this.getRawblock(this.userInput);
         break;
       default:
-        console.error('Invalid function selected');
+        // console.error('Invalid function selected');
     }
   }
 
@@ -81,22 +81,22 @@ export class BlockchainComponent {
 
   getMultiaddr(active: string): void {
     this.blockchainService.getMultiaddr(active).subscribe((result: MultipleAddressResult) => this.searchResult = result);
-    console.log(this.searchResult);
+    // console.log(this.searchResult);
   }
 
   getRawaddr(address: string): void {
     this.blockchainService.getRawaddr(address).subscribe(result => this.searchResult = result);
-    console.log(this.searchResult);
+    // console.log(this.searchResult);
   }
 
   getRawtx(txid: string): void {
     this.blockchainService.getRawtx(txid).subscribe(result => this.searchResult = result);
-    console.log(this.searchResult);
+    // console.log(this.searchResult);
   }
 
   getRawblock(blockhash: string): void {
     this.blockchainService.getRawblock(blockhash).subscribe(result => this.searchResult = result);
-    console.log(this.searchResult);
+    // console.log(this.searchResult);
   }
 
 }
