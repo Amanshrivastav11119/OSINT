@@ -288,13 +288,19 @@ app.post('/api/newskeyword', async (req, res) => {
 app.get('/api/facebook/news', async (req, res) => {
   const keywords = req.query.keywords;
   try {
-    const searchData = await Facebook.find({ description: { $regex: keywords, $options: 'i' } });
+    const searchData = await Facebook.find({
+      $or: [
+        { title: { $regex: keywords, $options: 'i' } },
+        { description: { $regex: keywords, $options: 'i' } },
+      ],
+    });
     res.json(searchData);
   } catch (error) {
     console.error(error);
     res.status(500).send('Error fetching data from MongoDB');
   }
 });
+
 
 // console.log('__dirname:', __dirname);
 // // Specify the path to your SSL/TLS certificates
