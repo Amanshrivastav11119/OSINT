@@ -301,7 +301,6 @@ app.get('/api/facebook/news', async (req, res) => {
   }
 });
 
-
 // console.log('__dirname:', __dirname);
 // // Specify the path to your SSL/TLS certificates
 // const sslOptions = {
