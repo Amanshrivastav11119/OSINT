@@ -8,7 +8,7 @@
           <div class="input-group">
             <!-- search box -->
             <input type="text" class="form-control rounded-5 shadow transparent-bg" [class.input-highlight]="isFocused" #box #search
-              placeholder="Search Keywords" aria-label="Search Word" aria-describedby="button-addon2"
+              placeholder="Search Keywords" aria-label="Search Word" aria-describedby="button-addon2"  [(ngModel)]="searchTerm"
               (keyup.enter)="getValue(box.value)" (keyup.enter)="searchNews()" (focus)="onFocus()" (blur)="onBlur()">
             &nbsp;
             &nbsp;

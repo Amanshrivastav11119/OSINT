@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NewsapiService } from '../../service/newsapi.service';
 import { saveAs } from 'file-saver';
 import * as pdfMake from 'pdfmake/build/pdfmake';
@@ -8,7 +8,7 @@ import * as JSZip from 'jszip';
 import { jsPDF } from 'jspdf';
 import * as Sentiment from 'sentiment';
 import { TranslationService } from '../../service/translation.service';
-import { Router } from '@angular/router';
+import { SharedDataService } from '../../service/shared-data.service';
 
 @Component({
   selector: 'app-liveseach',
@@ -16,9 +16,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./liveseach.component.css']
 })
 
-export class LiveseachComponent {
+export class LiveseachComponent implements OnInit {
 
-  constructor(private api: NewsapiService, private translationService: TranslationService) { }
+  constructor(private api: NewsapiService, private translationService: TranslationService,  private sharedDataService: SharedDataService) { }
 
   //advnace search menu online
   countries: { name: string, code: string }[] = [
@@ -282,7 +282,12 @@ export class LiveseachComponent {
   sentiment = new Sentiment();
   selectedSentimentFilter: string = 'All'; // Add this line
 
-
+  ngOnInit() {
+    this.sharedDataService.searchQuery$.subscribe(searchQuery => {
+      // Update the searcht property when it changes
+      this.searcht = searchQuery;
+    });
+  }
 
   handleRemove(index: number) {
     // Implement your remove logic here
@@ -554,8 +559,6 @@ export class LiveseachComponent {
       console.log(translatedText);
     });
   }
-
-  ngOnInit(): void { }
 
   // search via keyword, countrycode and languagecode api
   searchNews(query: string, countrycode: string, languagecode: string) {

@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { YouTubeService } from '../service/youtube.service';
 import * as Sentiment from 'sentiment';
 import { MatDialog } from '@angular/material/dialog';
 import { VideoModalComponent } from '../video-modal/video-modal.component';
+import { SharedDataService } from '../service/shared-data.service'; 
+
 interface VideoDetails {
   kind: string;
   etag: string;
@@ -35,9 +37,18 @@ interface VideoDetails {
   templateUrl: './youtube.component.html',
   styleUrls: ['./youtube.component.css']
 })
-export class YouTubeSearchComponent {
+export class YouTubeSearchComponent implements OnInit {
 
-  constructor(private youtubeService: YouTubeService, public dialog: MatDialog) { }
+  constructor(private youtubeService: YouTubeService, public dialog: MatDialog,  private sharedDataService: SharedDataService) { }
+  
+  ngOnInit(): void {
+    this.sharedDataService.searchQuery$.subscribe(searchQuery => {
+      // Update the searchQuery property when it changes
+      this.searchQuery = searchQuery;
+    });
+    throw new Error('Method not implemented.');
+    
+  }
 
   searchQuery: string;  //search text
   videos: any[];  //data store

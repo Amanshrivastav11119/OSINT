@@ -268,19 +268,39 @@ app.get('/api/news/:keywords', (req, res) => {
   );
 });
 
-// Define a route to handle POST requests for groups and keywords
-app.post('/api/newskeyword', async (req, res) => {
+// API endpoint to fetch groups and keywords from MongoDB
+app.get('/api/newskeyword', async (req, res) => {
   try {
-    const { keywords, group_name, group_id } = req.body;
-    // Create a new document based on the incoming request data
-    const newsKeyword = new NewsKeyword({ group_name, group_id, keywords });
-    // Save the document to the database
-    await newsKeyword.save();
-    // Send a JSON response
-    res.status(200).json({ message: 'Keywords and groups saved to MongoDB' });
+    const newsKeywordData = await NewsKeyword.find();
+    res.json(newsKeywordData);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error saving keywords and groups to MongoDB');
+    res.status(500).send('Error fetching groups and keywords from MongoDB');
+  }
+});
+
+// API endpoint to add or update groups and keywords in MongoDB
+app.post('/api/newskeyword', async (req, res) => {
+  try {
+    const groupsAndKeywords = req.body;
+    await NewsKeyword.deleteMany(); // Clear existing groups and keywords
+    await NewsKeyword.insertMany(groupsAndKeywords); // Insert new groups and keywords
+    res.status(200).json({ message: 'Groups and keywords saved to MongoDB' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error saving groups and keywords to MongoDB');
+  }
+});
+
+// API endpoint to delete a group and its keywords from MongoDB
+app.delete('/api/newskeyword/:groupId', async (req, res) => {
+  const groupId = req.params.groupId;
+  try {
+    await NewsKeyword.deleteOne({ group_id: groupId });
+    res.status(200).json({ message: 'Group and keywords deleted from MongoDB' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error deleting group and keywords from MongoDB');
   }
 });
 

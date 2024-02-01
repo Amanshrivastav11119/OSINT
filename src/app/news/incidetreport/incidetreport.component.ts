@@ -6,6 +6,8 @@ import { saveAs } from 'file-saver';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as JSZip from 'jszip';
+import { SharedDataService } from '../../service/shared-data.service';
+
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
@@ -16,7 +18,7 @@ import * as JSZip from 'jszip';
 })
 export class IncidetreportComponent implements OnInit {
 
-  constructor(private api: NewsapiService, public dialog: MatDialog) { }
+  constructor(private api: NewsapiService, public dialog: MatDialog,  private sharedDataService: SharedDataService) { }
 
   newsData: any;
   selectedLanguage: string;
@@ -130,6 +132,10 @@ export class IncidetreportComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.sharedDataService.searchQuery$.subscribe(searchQuery => {
+      // Update the searchQuery property when it changes
+      this.searchTerm = searchQuery;
+    });
     this.loadSavedNews();
   }
 

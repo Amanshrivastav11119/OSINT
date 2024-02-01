@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElibraryService } from '../service/elibrary.service';
+import { SharedDataService } from '../service/shared-data.service'; 
 
 @Component({
   selector: 'app-elibrary',
@@ -10,9 +11,13 @@ export class ElibraryComponent implements OnInit {
 
   selectedFolder: string = ''; // Add this property
 
-  constructor(private elibraryService: ElibraryService) { }
+  constructor(private elibraryService: ElibraryService,  private sharedDataService: SharedDataService) { }
 
   ngOnInit(): void {
+    this.sharedDataService.searchQuery$.subscribe(searchQuery => {
+      // Update the searchQuery property when it changes
+      this.searchTerm = searchQuery;
+    });
     this.fetchElibraryData();
   }
 

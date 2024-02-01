@@ -1,14 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FlickrService } from '../service/flickr.service';
 import * as JSZip from 'jszip';
+import { SharedDataService } from '../service/shared-data.service'; 
+
 @Component({
   selector: 'app-flickr',
   templateUrl: './flickr.component.html',
   styleUrls: ['./flickr.component.css']
 })
-export class FlickrComponent {
+export class FlickrComponent implements OnInit {
 
-  constructor(private flickrService: FlickrService) { }
+  constructor(private flickrService: FlickrService, private sharedDataService: SharedDataService) { }
+
+  ngOnInit(): void {
+    this.sharedDataService.searchQuery$.subscribe(searchQuery => {
+      // Update the searchQuery property when it changes
+      this.searchtext = searchQuery;
+    });
+    throw new Error('Method not implemented.');
+  }
 
   searchtext: string = '';  //search query
   photos: any[] = [];  //data store

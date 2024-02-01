@@ -85,18 +85,20 @@ export class NewsapiService {
     return this._http.post(this.serverUrl, newsData);
   }
 
-  getKeywordsAndGroups(): Observable<any> {
-    return this._http.get<any>(`${this.serverUrl}/keywords-and-groups`);
+  // API endpoint to fetch groups and keywords from MongoDB
+  getGroupsAndKeywords(): Observable<any> {
+    return this._http.get<any>(`${this.serverUrl}/newskeyword`);
   }
 
-  saveKeywordsAndGroups(keywords: any[], groups: string[]): Observable<any> {
-    const url = 'http://localhost:3000/api/newskeyword';  // Update the URL accordingly
-    return this._http.post<any>(url, { keywords, groups }).pipe(
-      catchError((error) => {
-        console.error('Error saving keywords and groups to the backend:', error);
-        return throwError('Error saving keywords and groups to the backend');
-      })
-    );
+  // API endpoint to add or update groups and keywords in MongoDB
+  saveGroupsAndKeywords(groups: any[]): Observable<any> {
+    return this._http.post(`${this.serverUrl}/newskeyword`, groups);
   }
+
+  // API endpoint to delete a group and its keywords from MongoDB
+  deleteGroupAndKeywords(groupId: string): Observable<any> {
+    return this._http.delete(`${this.serverUrl}/newskeyword/${groupId}`);
+  }
+
 
 }

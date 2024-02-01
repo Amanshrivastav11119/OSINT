@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WhoisService } from '../service/whois.service';
+import { SharedDataService } from '../service/shared-data.service'; 
 
 @Component({
   selector: 'app-who-is',
   templateUrl: './whois.component.html',
   styleUrls: ['./whois.component.css']
 })
-export class WhoisComponent {
-
+export class WhoisComponent implements OnInit{
 
   domain: string;
   whoisData: any;
@@ -23,7 +23,15 @@ export class WhoisComponent {
     this.isFocused = false;
   } 
 
-  constructor(private whoisService: WhoisService) { }
+  constructor(private whoisService: WhoisService,  private sharedDataService: SharedDataService) { }
+
+  ngOnInit(): void {
+    this.sharedDataService.searchQuery$.subscribe(searchQuery => {
+      // Update the searchQuery property when it changes
+      this.domain = searchQuery;
+    }); 
+    throw new Error('Method not implemented.');
+  }
 
   search() {
     if (this.selectedSearchType === 'whois') {

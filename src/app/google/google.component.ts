@@ -1,14 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GoogleSearchService } from '../service/google.service';
+import { SharedDataService } from '../service/shared-data.service'; 
 
 @Component({
   selector: 'app-google-search',
   templateUrl: './google.component.html',
   styleUrls: ['./google.component.css']
 })
-export class GoogleSearchComponent {
+export class GoogleSearchComponent implements OnInit{
 
-  constructor(private searchService: GoogleSearchService) { }
+  constructor(private searchService: GoogleSearchService, private sharedDataService: SharedDataService) { }
+
+  ngOnInit(): void {
+    this.sharedDataService.searchQuery$.subscribe(searchQuery => {
+      // Update the searchQuery property when it changes
+      this.query = searchQuery;
+    });
+    throw new Error('Method not implemented.');
+  }
 
   query: string;
   results: any[];

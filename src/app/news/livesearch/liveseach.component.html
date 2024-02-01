@@ -7,7 +7,7 @@
         <div class="col-xl">
           <!-- input placeholder -->
           <div class="input-group">
-            <input type="text" class="form-control rounded-5 shadow transparent-bg" [class.input-highlight]="isFocused"
+            <input type="text" class="form-control rounded-5 shadow transparent-bg" [class.input-highlight]="isFocused" [(ngModel)]="searcht"
               #box #search placeholder="Search Keywords" aria-label="Search Word" aria-describedby="button-addon2"
               (keyup.enter)="searchNews(search.value, languageCode, countryCode)" (focus)="onFocus()" (blur)="onBlur()">
             &nbsp;

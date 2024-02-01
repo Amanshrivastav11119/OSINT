@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { GlobalsearchService } from '../service/globalsearch.service';
 import { MatDialog } from '@angular/material/dialog';
 import { VideoModalComponent } from '../video-modal/video-modal.component';
+import { SharedDataService } from '../service/shared-data.service';
+
 @Component({
   selector: 'app-globalsearch',
   templateUrl: './globalsearch.component.html',
@@ -23,13 +25,13 @@ export class GlobalsearchComponent {
    isModalOpen = false;
    nextPageToken: string = '';
 
-   constructor(private globalService: GlobalsearchService,  public dialog: MatDialog) {}
+   constructor(private globalService: GlobalsearchService,  public dialog: MatDialog, private sharedDataService: SharedDataService) {}
 
    search() {
+    this.sharedDataService.setSearchQuery(this.searchQuery); // Save search query
     this.globalService.search(this.searchQuery, this.nextPageToken);
     this.globalService.searchResults$.subscribe(results => {
       if (this.nextPageToken) {
-        // Append new results to the existing searchResults
         this.searchResults[0].items.push(...results[0]?.items);
       } else {
         this.searchResults = results;
@@ -37,9 +39,11 @@ export class GlobalsearchComponent {
       this.nextPageToken = results[0]?.nextPageToken;
     });
   }
+
   loadMore() {
     this.globalService.search(this.searchQuery, this.nextPageToken);
   }
+  
   //open youtube dialog box
   openDialog(video: any): void {
     const videoLink = `https://www.youtube.com/watch?v=${video.id.videoId}`;
