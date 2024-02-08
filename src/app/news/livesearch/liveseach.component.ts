@@ -562,6 +562,7 @@ export class LiveseachComponent implements OnInit {
 
   // search via keyword, countrycode and languagecode api
   searchNews(query: string, countrycode: string, languagecode: string) {
+    this.sharedDataService.setSearchQuery(query);
     this.api.topheadlines(query, countrycode, languagecode).subscribe(data => {
       this.newsData = data;
       this.nextPageToken = data.nextPage;

@@ -10,7 +10,7 @@ const https = require('https');
 
 app.use(express.json());
 
-const allowedOrigins = ['http://192.168.130.176:4200', 'http://localhost:4200'];
+const allowedOrigins = ['http://192.168.1.176:4200', 'http://localhost:4200'];
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
@@ -28,8 +28,8 @@ app.use((err, req, res, next) => {
 });
 
 // Connect to MongoDB (replace <YOUR_MONGODB_URI> with your actual URI)
-const db1 = mongoose.createConnection('mongodb://192.168.130.34:27019/osint3', { useNewUrlParser: true, useUnifiedTopology: true });
-const db2 = mongoose.createConnection('mongodb://192.168.130.34:27019/facebook', { useNewUrlParser: true, useUnifiedTopology: true });
+const db1 = mongoose.createConnection('mongodb://192.168.1.34:27019/osint3', { useNewUrlParser: true, useUnifiedTopology: true });
+const db2 = mongoose.createConnection('mongodb://192.168.1.34:27019/facebook', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 const newsSchema = new mongoose.Schema({

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GlobalsearchService } from '../service/globalsearch.service';
 import { MatDialog } from '@angular/material/dialog';
 import { VideoModalComponent } from '../video-modal/video-modal.component';
@@ -9,7 +9,7 @@ import { SharedDataService } from '../service/shared-data.service';
   templateUrl: './globalsearch.component.html',
   styleUrls: ['./globalsearch.component.css']
 })
-export class GlobalsearchComponent {
+export class GlobalsearchComponent implements OnInit{
 
    // search placeholder functions
    isFocused: boolean = false;
@@ -26,6 +26,13 @@ export class GlobalsearchComponent {
    nextPageToken: string = '';
 
    constructor(private globalService: GlobalsearchService,  public dialog: MatDialog, private sharedDataService: SharedDataService) {}
+
+  ngOnInit(): void {
+   this.sharedDataService.searchQuery$.subscribe(searchQuery => {
+      // Update the searcht property when it changes
+      this.searchQuery = searchQuery;
+    });
+  }
 
    search() {
     this.sharedDataService.setSearchQuery(this.searchQuery); // Save search query
