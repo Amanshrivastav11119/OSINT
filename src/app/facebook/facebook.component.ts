@@ -34,7 +34,8 @@ export class FacebookComponent implements OnInit{
   searchData() {
     this.facebookService.searchFacebookData(this.searchKeywords).subscribe((data) => {
       this.searchResults = data;
-      // console.log(data);
+      console.log(data);
+      console.log(data[1].imagehash[0])
     });
   }
 

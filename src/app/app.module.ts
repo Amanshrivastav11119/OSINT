@@ -58,6 +58,7 @@ import { GoogleTrendsSearchComponent } from './google-trends-search/google-trend
 import { WhoisComponent } from './whois/whois.component';
 import { LinkedinComponent } from './linkedin/linkedin.component';
 import { BlockchainComponent } from './blockchain/blockchain.component';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -115,6 +116,7 @@ import { BlockchainComponent } from './blockchain/blockchain.component';
     MatFormFieldModule,
     ReactiveFormsModule,
     NgChartsModule,
+    MatGridListModule,
     BackButtonDisableModule.forRoot()
   ],
   providers: [NewsapiService,YouTubeService,FlickrService,WikiService,GoogleSearchService],
