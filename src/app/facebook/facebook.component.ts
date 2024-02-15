@@ -1,27 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { FacebookService } from '../service/facebook.service';
-import { SharedDataService } from '../service/shared-data.service'; 
+import { SharedDataService } from '../service/shared-data.service';
+
 
 @Component({
   selector: 'app-facebook',
   templateUrl: './facebook.component.html',
   styleUrls: ['./facebook.component.css']
 })
-export class FacebookComponent implements OnInit{
+export class FacebookComponent implements OnInit {
 
   searchKeywords: string = '';
   searchResults: any[] = [];
+  selectedArticles: any[] = [];
 
-   // Search placeholder functions
-   isFocused: boolean = false;
-   onFocus() {
-     this.isFocused = true;
-   }
-   onBlur() {
-     this.isFocused = false;
-   }
+  // Search placeholder functions
+  isFocused: boolean = false;
+  onFocus() {
+    this.isFocused = true;
+  }
+  onBlur() {
+    this.isFocused = false;
+  }
 
-  constructor(private facebookService: FacebookService,  private sharedDataService: SharedDataService) { }
+  // Function to add or remove an article from the selected list
+  toggleSelectedArticle(searchResults: any) {
+    const index = this.searchResults.findIndex(item => item === searchResults);
+    if (index !== -1) {
+      this.searchResults.splice(index, 1);
+    }
+  }
+  isArticleSelected(article: any) {
+    return this.selectedArticles.includes(article);
+  }
+
+  constructor(private facebookService: FacebookService, private sharedDataService: SharedDataService) { }
 
   ngOnInit(): void {
     this.sharedDataService.searchQuery$.subscribe(searchQuery => {
