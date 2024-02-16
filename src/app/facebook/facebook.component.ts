@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FacebookService } from '../service/facebook.service';
 import { SharedDataService } from '../service/shared-data.service';
 
-
 @Component({
   selector: 'app-facebook',
   templateUrl: './facebook.component.html',
