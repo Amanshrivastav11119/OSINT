@@ -93,7 +93,12 @@ const facebookSchema = new mongoose.Schema({
   title: String,
 });
 
+const fbKeywordSchema = new mongoose.Schema({
+  search: String
+});
+
 const Facebook = db2.model('Facebook', facebookSchema, 'facebook_collection');
+const FbKeyword = db2.model('FbKeyword', fbKeywordSchema, 'search');
 const NewsKeyword = db1.model('NewsKeyword', newsKeywordSchema);
 const News = db1.model('News', newsSchema);
 const Youtube = db1.model('Youtube', youtubeSchema);
@@ -320,6 +325,44 @@ app.get('/api/facebook/news', async (req, res) => {
     res.status(500).send('Error fetching data from MongoDB');
   }
 });
+
+
+// API endpoint to fetch Facebook keywords
+app.get('/api/facebook/keywords', async (req, res) => {
+  try {
+    const keywords = await FbKeyword.find();
+    res.json(keywords);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching keywords from MongoDB');
+  }
+});
+
+// API endpoint to update a keyword
+app.put('/api/facebook/keywords/:id', async (req, res) => {
+  const id = req.params.id;
+  const { search } = req.body;
+  try {
+    await FbKeyword.findByIdAndUpdate(id, { search });
+    res.status(200).json({ message: 'Keyword updated successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error updating keyword in MongoDB');
+  }
+});
+
+// API endpoint to delete a keyword
+app.delete('/api/facebook/keywords/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    await FbKeyword.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Keyword deleted successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error deleting keyword from MongoDB');
+  }
+});
+
 
 // console.log('__dirname:', __dirname);
 // // Specify the path to your SSL/TLS certificates

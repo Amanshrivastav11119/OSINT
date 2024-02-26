@@ -12,6 +12,7 @@ export class FacebookComponent implements OnInit {
   searchKeywords: string = '';
   searchResults: any[] = [];
   selectedArticles: any[] = [];
+  keywords: any[] = []; // Array to store keywords
 
   // Search placeholder functions
   isFocused: boolean = false;
@@ -23,10 +24,12 @@ export class FacebookComponent implements OnInit {
   }
 
   // Function to add or remove an article from the selected list
-  toggleSelectedArticle(searchResults: any) {
-    const index = this.searchResults.findIndex(item => item === searchResults);
+  toggleSelectedArticle(article: any) {
+    const index = this.selectedArticles.findIndex(item => item === article);
     if (index !== -1) {
-      this.searchResults.splice(index, 1);
+      this.selectedArticles.splice(index, 1);
+    } else {
+      this.selectedArticles.push(article);
     }
   }
   isArticleSelected(article: any) {
@@ -35,20 +38,45 @@ export class FacebookComponent implements OnInit {
 
   constructor(private facebookService: FacebookService, private sharedDataService: SharedDataService) { }
 
+  
   ngOnInit(): void {
     this.sharedDataService.searchQuery$.subscribe(searchQuery => {
-      // Update the searchQuery property when it changes
       this.searchKeywords = searchQuery;
     });
-    throw new Error('Method not implemented.');
+    this.fetchKeywords();
   }
 
+  // Method to search data based on keywords
   searchData() {
     this.facebookService.searchFacebookData(this.searchKeywords).subscribe((data) => {
       this.searchResults = data;
       console.log(data);
-      console.log(data[1].imagehash[0])
     });
   }
 
+  // Method to fetch keywords
+  fetchKeywords() {
+    this.facebookService.fetchKeywords().subscribe((data) => {
+      this.keywords = data;
+    });
+  }
+
+  // Method to update a keyword
+  updateKeyword(keywordId: string, newKeyword: string) {
+    const keywordData = { search: newKeyword };
+    this.facebookService.updateKeyword(keywordId, keywordData).subscribe(() => {
+      console.log('Keyword updated successfully');
+      // Refresh keywords after update
+      this.fetchKeywords();
+    });
+  }
+
+  // Method to delete a keyword
+  deleteKeyword(keywordId: string) {
+    this.facebookService.deleteKeyword(keywordId).subscribe(() => {
+      console.log('Keyword deleted successfully');
+      // Refresh keywords after delete
+      this.fetchKeywords();
+    });
+  }
 }

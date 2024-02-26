@@ -32,6 +32,18 @@
     </div>
   </div>
 </mat-toolbar-row>
+<!-- Display fetched keywords -->
+<div *ngIf="keywords.length > 0">
+  <h3>Fetched Keywords:</h3>
+  <ul>
+    <li *ngFor="let keyword of keywords; let i = index">
+      <input type="text" [(ngModel)]="keyword.search" placeholder="Edit keyword">
+      <button (click)="updateKeyword(keyword._id, keyword.search)">Update</button>
+      <!-- <button (click)="deleteKeyword(keyword._id)">Delete</button> -->
+    </li>
+  </ul>
+</div>
+
 <!-- card -->
 <div class="container-fluid mt-2 transparent-bg">
   <div class="row mt-3">
@@ -40,7 +52,10 @@
         <div class="card-header d-flex align-items-center justify-content-between">
           <div class="ml-10">
             <h5 class="mb-0 card-title">
-              {{item.title}}
+              <img class="rounded-circle mr-2" [src]="item.profile_picture_link" alt="Channel Profile" width="40"
+                height="40" style="margin-right: 10px;" onerror="this.onerror=null; this.src='../../assets/logo.svg';">
+
+              <a href="{{item.profiler_link}}" target="_blank">{{item.title }}</a>
             </h5>
           </div>
           <div class="align-content-end">
