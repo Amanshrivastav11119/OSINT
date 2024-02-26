@@ -1,0 +1,19 @@
+<mat-dialog-content class="modal-content">
+  <!-- Left Section (Image) -->
+  <div class="modal-left">
+    <img [src]="data.post.imagehash[0]" alt="Image" style="width: 100%; height: auto;">
+  </div>
+  <!-- Right Section (Details) -->
+  <div class="modal-right">
+    <!-- Close Button -->
+    <button mat-mini-fab class="close-button" (click)="closeDialog()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- Post Details -->
+    <div class="post-details">
+      <h2>{{ data.post.title }}</h2>
+      <p>{{ data.post.description }}</p>
+      <!-- Add more properties as needed -->
+    </div>
+  </div>
+</mat-dialog-content>

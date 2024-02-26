@@ -12,12 +12,11 @@ declare var YT: any; // Declare the YouTube variable
   styleUrls: ['./video-modal.component.css']
 })
 export class VideoModalComponent {
-  private player: any; // Variable to hold the YouTube player
 
+  private player: any; // Variable to hold the YouTube player
   videoLink: string;
   channel: any;
   isModalOpen = false;
-
 
   constructor(
     private sanitizer: DomSanitizer,

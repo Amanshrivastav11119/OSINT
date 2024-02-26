@@ -44,6 +44,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { VideoModalComponent } from './video-modal/video-modal.component';
+import { ImageModalComponent } from './image-model/image-modal.component';
 import { TelegramComponent } from './telegram/telegram.component';
 import { GlobalsearchComponent } from './globalsearch/globalsearch.component';
 import { AdminComponent } from './admin/admin.component';
@@ -84,6 +85,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     WhoisComponent,
     LinkedinComponent,
     BlockchainComponent,
+    ImageModalComponent
   ],
   imports: [
     RouterModule,

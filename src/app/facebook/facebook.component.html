@@ -70,15 +70,15 @@
             <h5 class="card-description" style="font-size: medium;">{{ item.description }}</h5>
           </div>
           <!-- Image Grid -->
-          <ng-container *ngIf="item.imagehash.length === 1">
+          <ng-container *ngIf="item.imagehash.length === 1" >
             <img [src]="item.imagehash[0]" alt="{{item.title }}"
-              style="width: 100%; height: 300; object-fit: cover; border-radius: 10px;">
+              style="width: 100%; height: 300; object-fit: cover; border-radius: 10px;"  (click)="openImageModal(item)"  >
           </ng-container>
           <!-- Render images in a grid if multiple images exist -->
           <ng-container *ngIf="item.imagehash.length > 1">
             <mat-grid-list cols="2" rowHeight="200px" gutterSize="10px">
               <!-- Reverse the order of the array to display images from top left to bottom right -->
-              <mat-grid-tile *ngFor="let image of item.imagehash.slice(0, 4)">
+              <mat-grid-tile *ngFor="let image of item.imagehash.slice(0, 4)" (click)="openImageModal(item)">
                 <img [src]="image" alt="{{item.title }}"
                   style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
               </mat-grid-tile>

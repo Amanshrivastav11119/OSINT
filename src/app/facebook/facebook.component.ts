@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ImageModalComponent } from '../image-model/image-modal.component'; // Import the ImageModalComponent
 import { FacebookService } from '../service/facebook.service';
 import { SharedDataService } from '../service/shared-data.service';
 
@@ -36,7 +38,7 @@ export class FacebookComponent implements OnInit {
     return this.selectedArticles.includes(article);
   }
 
-  constructor(private facebookService: FacebookService, private sharedDataService: SharedDataService) { }
+  constructor(private facebookService: FacebookService, private sharedDataService: SharedDataService, public dialog: MatDialog) { }
 
   
   ngOnInit(): void {
@@ -79,4 +81,13 @@ export class FacebookComponent implements OnInit {
       this.fetchKeywords();
     });
   }
+
+    // Method to open the modal with image details
+    openImageModal(post: any) {
+      this.dialog.open(ImageModalComponent, {
+        width: '800px',
+        data: { post: post }
+      });
+    }
+
 }
