@@ -1,20 +1,21 @@
 <mat-dialog-content class="modal-content">
   <!-- Left Section (Image) -->
-  <div class="modal-left">
-    <!-- Image Slider with Navigation Buttons -->
-    <div class="image-slider-container">
-      <button mat-icon-button class="image-slider-nav-button" [disabled]="currentImageIndex === 0"
-        (click)="prevImage()">
-        <mat-icon>keyboard_arrow_left</mat-icon>
-      </button>
-      <a [href]="data.post.post_link" target="_blank"><img [src]="currentImage" alt="Image"
-          class="image-slider-image"></a>
-      <button mat-icon-button class="image-slider-nav-button"
-        [disabled]="currentImageIndex === (data.post.imagehash.length - 1)" (click)="nextImage()">
-        <mat-icon>keyboard_arrow_right</mat-icon>
-      </button>
-    </div>
+ <!-- Left Section (Image) -->
+<div class="modal-left">
+  <!-- Image Slider with Navigation Buttons -->
+  <div class="image-slider-container">
+    <button *ngIf="currentImageIndex !== 0" mat-icon-button class="image-slider-nav-button" (click)="prevImage()">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <a [href]="data.post.post_link" target="_blank">
+      <img [src]="currentImage" alt="Image" class="image-slider-image">
+    </a>
+    <button *ngIf="currentImageIndex !== (data.post.imagehash.length - 1)" mat-icon-button class="image-slider-nav-button" (click)="nextImage()">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
   </div>
+</div>
+
   <!-- Right Section (Details) -->
   <div class="modal-right" style="margin-left: 20px;">
     <!-- Close Button -->

@@ -72,7 +72,7 @@
           <!-- Image Grid -->
           <ng-container *ngIf="item.imagehash.length === 1" >
             <img [src]="item.imagehash[0]" alt="{{item.title }}"
-              style="width: 100%; height: 300; object-fit: cover; border-radius: 10px;"  (click)="openImageModal(item)"  >
+              style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;"  (click)="openImageModal(item)"  >
           </ng-container>
           <!-- Render images in a grid if multiple images exist -->
           <ng-container *ngIf="item.imagehash.length > 1">
