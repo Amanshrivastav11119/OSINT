@@ -8,12 +8,37 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ImageModalComponent {
 
+  currentImageIndex = 0;
+  currentImage: string;
+
   constructor(
     public dialogRef: MatDialogRef<ImageModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    console.log('Received data in modal component: ', this.data);
+    this.loadCurrentImage();
+    // console.log(data);
   }
+
+  loadCurrentImage() {
+    if (this.data.post.imagehash.length > 0) {
+      this.currentImage = this.data.post.imagehash[this.currentImageIndex];
+    }
+  }
+
+  nextImage() {
+    if (this.currentImageIndex < this.data.post.imagehash.length - 1) {
+      this.currentImageIndex++;
+      this.loadCurrentImage();
+    }
+  }
+
+  prevImage() {
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+      this.loadCurrentImage();
+    }
+  }
+ 
 
   closeDialog(): void {
     this.dialogRef.close();

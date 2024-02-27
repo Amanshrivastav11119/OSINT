@@ -52,7 +52,7 @@ export class FacebookComponent implements OnInit {
   searchData() {
     this.facebookService.searchFacebookData(this.searchKeywords).subscribe((data) => {
       this.searchResults = data;
-      console.log(data);
+      // console.log(data);
     });
   }
 
@@ -85,7 +85,7 @@ export class FacebookComponent implements OnInit {
     // Method to open the modal with image details
     openImageModal(post: any) {
       this.dialog.open(ImageModalComponent, {
-        width: '800px',
+        width: '1000px',
         data: { post: post }
       });
     }
